@@ -161,7 +161,7 @@ public class YutNoRiSet {
     Piece targetPiece = player.getPieceByPieceId(pieceId);
     Circle currentCircle;
     if(targetPiece.isOutOfBoard()) {
-      currentCircle = board.getCircleByLocation(1, 1);
+      currentCircle = board.getCircleByLocation(7, 7);
     } else {
       currentCircle = board.getCircleByLocation(targetPiece.getRow(), targetPiece.getColumn());
     }
@@ -176,7 +176,7 @@ public class YutNoRiSet {
       }
     }
 
-    observable.firePropertyChange("hello",false, true);
+    observable.firePropertyChange("movable",false, true);
   }
 
   public void move(int pieceId, int row, int column){
@@ -193,5 +193,6 @@ public class YutNoRiSet {
     targetPiece.setOutOfBoard(false);
     nextCircle.setOccupied();
     lastCircle.resetCircle();
+    observable.firePropertyChange("move", true, false);
   }
 }
