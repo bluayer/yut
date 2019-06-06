@@ -150,7 +150,6 @@ public class YutGui {
       statusPanels.add(player[i]);
       statusPanels.add(beginPiece[i]);
       // Add number if player's left piece
-
       statusPanels.add(new JLabel(Integer.toString(yutnoriset.getPlayer().getLeftNumOfPieceOfPlayer(i))));
       // beginPiece[i].addMouseListener(clickBridge);
     }

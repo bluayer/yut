@@ -43,8 +43,8 @@ public class Piece extends ClickableGameObject {
     return outOfBoard;
   }
 
-  public void setOutOfBoard(){
-    outOfBoard = false;
+  public void setOutOfBoard(boolean value){
+    outOfBoard = value;
   }
 
 }

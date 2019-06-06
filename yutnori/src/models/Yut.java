@@ -6,10 +6,8 @@ public class Yut {
 
 
   private boolean status;
-  private String type;
 
-  Yut(String type){
-    this.type = type;
+  Yut(){
     status = true;
   }
 
@@ -21,9 +19,5 @@ public class Yut {
     Random generate = new Random();
     status = generate.nextBoolean();
     return status;
-  }
-
-  public String getType(){
-    return type;
   }
 }

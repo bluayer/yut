@@ -73,9 +73,10 @@ public class Board {
     return boards.get(circleId);
   }
 
-  public void showMovable(ArrayList<Integer> movableCircleIds){
-    for(int i : movableCircleIds){
-      getCircleByCircleId(i).setChangeable();
+  public void setAllUnChangeable(){
+    for(Circle i : boards){
+      i.resetChangeable();
     }
   }
+
 }
