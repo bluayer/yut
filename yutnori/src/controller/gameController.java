@@ -1,6 +1,7 @@
 package controller;
 
 //import views.MouseClick;
+import models.YutNoRiSet;
 import views.YutGui;
 
 import java.awt.event.ActionEvent;
@@ -17,26 +18,24 @@ public class gameController {
     public static processController c;
     public static void main(String[] args) throws IOException {
         YutGui yutgui = new YutGui();
-        models.YutNoRiSet yutSet = new models.YutNoRiSet();
+        final models.YutNoRiSet yutSet = new YutNoRiSet();
 
         yutgui.setupStartUI();
-        BackGroundPanel midP=yutgui.midPanel;
+        BackGroundPanel midP =yutgui.midPanel;
 
         yutgui.midPanel.enter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 yutgui.mainFrame.setVisible(false);
-                //pieceNumber = Integer.parseInt(yutgui.midPanel.pieceNumberInput.getText());
-                playerNumber = Integer.parseInt(midP.playerNumberInput.getText());
-                pieceNumber = Integer.parseInt(midP.pieceNumberInput.getText());
+
                 if (e.getSource().equals(midP.enter)) {
                     yutgui.setupYutGUI(playerNumber, pieceNumber);
                 }
-                yutSet.setOption(playerNumber, pieceNumber);
+                yutSet.setPlayer(midP.getPlayerNumber(), midP.getPieceNumber());
                 yutSet.setPlayerTurn(0);
-                c = new processController(yutSet, yutgui);
+               // c = new processController(yutSet, yutgui);
                 System.out.println("controller create");
-                c.gameProgress(yutSet.getPlayerTurn(), yutSet);
+                //c.gameProgress(yutSet.getPlayerTurn(), yutSet);
             }
         });
 

@@ -16,12 +16,24 @@ public class YutNoRiSet {
 
   private int playerTurn;
 
+  // Set board and yutSet, the setPlayer must be called to start the game.
+  public YutNoRiSet(){
+    board = new Board();
+    yutSet = new YutSet();
+  }
+
   public YutNoRiSet(int numOfPlayer, int numOfPiece){
     player = new Player(numOfPlayer, numOfPiece);
     board = new Board();
     yutSet = new YutSet();
     this.numOfPlayer = numOfPlayer;
     this.numOfPiece = numOfPiece;
+  }
+
+  public void setPlayer(int numberOfPlayer, int numberOfPiece){
+    player = new Player(numberOfPlayer, numberOfPiece);
+    this.numOfPlayer = numberOfPlayer;
+    this.numOfPiece = numberOfPiece;
   }
 
   public int getNumOfPlayer = numOfPlayer;
