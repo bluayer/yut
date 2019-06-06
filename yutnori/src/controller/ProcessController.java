@@ -58,8 +58,8 @@ public class ProcessController {
      * */
     public void selectOutOfBoardPieceProcess(){
         if(flag == 1){
-            chosenPiece = getPieceFromOutOfBoard(yutnoriSet.getPlayerTurn()); // 눌려진 버튼으로 Piece id를 받아온다.
-            showMovable(chosenPiece);
+            chosenPiece = yutnoriSet.getPlayer().getPieceFromOutOfBoard(yutnoriSet.getPlayerTurn()); // 눌려진 버튼으로 Piece id를 받아온다.
+            yutnoriSet.showMovable(chosenPiece);
             flag = 2;
         }
     }
@@ -67,7 +67,7 @@ public class ProcessController {
     public void selectInTheBoardPieceProcess(int row, int col){
         if(flag == 1){
             chosenPiece = yutnoriSet.getBoard().getCircleByLocation(row,col).getOccupyingPieces().get(0);
-            showMovable(chosenPiece);
+            yutnoriSet.showMovable(chosenPiece);
             flag = 2;
         }
     }

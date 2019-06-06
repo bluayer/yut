@@ -14,6 +14,7 @@ public class Player {
     this.playerNumber = playerNumber;
     this.pieceNumber = pieceNumber;
     players = new ArrayList<ArrayList<Piece>>();
+    playerResult = new ArrayList<ArrayList<Integer>>();
 
     for(int i = 0; i < playerNumber; i++){
       ArrayList<Piece> pieces = new ArrayList<Piece>();
@@ -22,6 +23,9 @@ public class Player {
         pieces.add(new Piece(0,0,i,i*10+j));
       }
       players.add(pieces);
+
+      ArrayList<Integer> playerR = new ArrayList<Integer>();
+      playerResult.add(playerR);
     }
   }
 
