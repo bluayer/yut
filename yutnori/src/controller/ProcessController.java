@@ -39,13 +39,15 @@ public class ProcessController {
     System.out.println("Roll Yut test!");
     if (flag == 0) { //BEFORE YUT ROLL STATE 일 때만 윷 던지기가 동작 하도록.
       currentTurn = yutnoriSet.getPlayerTurn();
-      numCanMove++;
+      if(numCanMove == 0 && res == 0){
+        return;
+      }
+
       yutnoriSet.getPlayer().getPlayerResult(currentTurn).add(res);
+      numCanMove++;
       if (res != 4 && res != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
         flag = 1;
       }
-      System.out.println(res + "가 나왔습니다");
-      System.out.print("player의 결과 : ");
       for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
         System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
       }
@@ -62,7 +64,14 @@ public class ProcessController {
       currentTurn = yutnoriSet.getPlayerTurn();
       int result;
       result = yutnoriSet.getYutSet().rollYut();
+      System.out.println(result);
+      System.out.println(numCanMove);
+      if(numCanMove == 0 && result == 0){
+        return;
+      }
+      
       numCanMove++;
+
       System.out.println(result); //나온 결과를 순서대로 resultSet에 저장 해준다.
       yutnoriSet.getPlayer().getPlayerResult(currentTurn).add(result);
       if (result != 4 && result != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
@@ -106,6 +115,7 @@ public class ProcessController {
         catchPoint++;
       }
       yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer) yutnoriSet.getClickedResult(chosenPiece, row, col));
+
       yutnoriSet.move(chosenPiece, row, col);
       numCanMove--;
 

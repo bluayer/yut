@@ -171,6 +171,7 @@ public class YutNoRiSet {
       currentCircle = board.getCircleByLocation(targetPiece.getRow(), targetPiece.getColumn());
     }
     // Change circle state changeable.
+    System.out.println("showMovablecalled!");
     for(int i : player.getPlayerResult(targetPiece.getOwnerId())){
       int[] nextMovableCircleIds = ruleTable.getNextMoveCircleIds(currentCircle.getId(), i);
 

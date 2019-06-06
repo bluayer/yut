@@ -111,6 +111,7 @@ public class MouseClick{
           } else {
             secondClickSetup(i, j);
             System.out.printf("Second click %d, %d \n", i, j);
+            pc.movePieceProcess(i,j);
           }
         }
       }
