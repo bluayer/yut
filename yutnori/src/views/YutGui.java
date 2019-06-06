@@ -1,7 +1,9 @@
 package views;
 
 
+import controller.ProcessController;
 import models.YutNoRiSet;
+
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,13 +23,13 @@ public class YutGui {
   public BackGroundPanel midPanel;
   public JFrame mainFrame;
   public JFrame initFrame;
-  public static ImagePanel btn[][];
-  static JButton testYutBtn[];
+  public static ImagePanel[][] btn;
+  static JButton[] testYutBtn;
   public JPanel yutBoard;
   YutNoRiSet yutnoriset;
   PieceSprite pieceSprite;
-  static JLabel player[];
-  static ImagePanel beginPiece[];
+  JLabel player[];
+  static ImagePanel[] beginPiece;
   static JButton yutBtn;
   private UIclick clickAction;
   private ImagePanel yutResultPanel;
@@ -47,6 +49,8 @@ public class YutGui {
     testYutBtn = makeTestYutBtn();
   }
 
+  public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
+
   public void boardRepaint() {
     for(int i = 1; i < 8; i++) {
       for (int j = 1; j < 8; j++) {
@@ -61,11 +65,11 @@ public class YutGui {
   private JButton[] makeTestYutBtn() {
     JButton [] test = new JButton[6];
     test[0] = new JButton("테스트 백도");
-    test[1] = new JButton("테스트 모");
-    test[2] = new JButton("테스트 도");
-    test[3] = new JButton("테스트 개");
-    test[4] = new JButton("테스트 걸");
-    test[5] = new JButton("테스트 윷");
+    test[1] = new JButton("테스트 도");
+    test[2] = new JButton("테스트 개");
+    test[3] = new JButton("테스트 걸");
+    test[4] = new JButton("테스트 윷");
+    test[5] = new JButton("테스트 모");
 
     for (int i =0; i<6; i++) {
       test[i].setPreferredSize(new Dimension(20, 20));
@@ -89,7 +93,7 @@ public class YutGui {
   }
 
   public void showYutResult(int res) {
-    String [] filename = { "backdo", "mo", "do", "gae", "gul", "yut"};
+    String [] filename = { "backdo", "do", "gae", "gul", "yut", "mo" };
     BufferedImage img = getYutImage(filename[res]);
     yutResultPanel.setImage(img);
     yutResultPanel.repaint();
@@ -177,7 +181,7 @@ public class YutGui {
     mainFrame.setVisible(true);
   }
 
-  private static void setPlayerLabel() {
+  private void setPlayerLabel() {
     JLabel player1 = new JLabel("Player 1");
     JLabel player2 = new JLabel("Player 2");
     JLabel player3 = new JLabel("Player 3");
@@ -194,7 +198,7 @@ public class YutGui {
     return ii;
   }
 
-  private static void setPiecePanel(BufferedImage[] pieceList, UIclick clickAction) {
+  private void setPiecePanel(BufferedImage[] pieceList, UIclick clickAction) {
     ImagePanel piece1 = new ImagePanel();
     ImagePanel piece2 = new ImagePanel();
     ImagePanel piece3 = new ImagePanel();

@@ -1,5 +1,7 @@
 package views;
 
+import controller.ProcessController;
+
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -11,7 +13,7 @@ public class MouseClick{
   private Color backgroundColor;
   public ImagePanel firstClk, secondClk;
   boolean isClicked;
-
+  private ProcessController pc;
 
   public MouseClick() {
     firstClk = null;
@@ -25,6 +27,8 @@ public class MouseClick{
     firstClk = null;
     secondClk = null;
   }
+
+  public void getProcessController(ProcessController pc) {  this.pc = pc; }
 
   public void firstClickSetup(int row, int column) {
     System.out.println("fst click setup");
@@ -65,6 +69,10 @@ public class MouseClick{
     }
 
     if (e.getSource().equals(YutGui.yutBtn)) {
+      if(pc == null) {
+        System.out.println("it's null");
+      }
+      pc.rollYutProcess();
       System.out.println("Roll yut clicked");
     }
 

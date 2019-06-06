@@ -20,6 +20,7 @@ public class GameController {
         YutGui yutgui = new YutGui(yutSet);
 
         yutgui.setupStartUI();
+
         BackGroundPanel midP =yutgui.midPanel;
 
         yutgui.midPanel.enter.addActionListener(new ActionListener() {
@@ -32,13 +33,14 @@ public class GameController {
                     midP.setPieceNumber(Integer.parseInt(midP.pieceNumberInput.getText()));
                     yutSet.setPlayer(midP.getPlayerNumber(), midP.getPieceNumber());
                     yutgui.setupYutGUI(midP.getPlayerNumber(), midP.getPieceNumber());
+                    yutSet.setPlayerTurn(0);
+                    processController = new ProcessController(yutSet, yutgui);
+                    yutgui.pcBridge(processController);
+                    System.out.println("controller create");
                 }
-                yutSet.setPlayerTurn(0);
-                processController = new ProcessController(yutSet, yutgui);
-                System.out.println("controller create");
-               //  processController.rollYutProcess();
             }
         });
+
 
         return;
     }
