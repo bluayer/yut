@@ -34,7 +34,7 @@ public class MouseClick{
   public void getProcessController(ProcessController pc) {  this.pc = pc; }
 
   public void firstClickSetup(int row, int column) {
-    System.out.println("fst click setup");
+    //System.out.println("fst click setup");
     initVars();
     // Click before start piece, so controller know who's piece selected.
     if(column == 0) {
@@ -43,12 +43,12 @@ public class MouseClick{
       isClicked = true;
       return;
     } else { // Click board
-
+      pc.selectInTheBoardPieceProcess(row, column);
       // setting firstClick
       firstClk = YutGui.btn[row][column];
       firstClk.setBackground(clickedColor);
       firstClk.repaint();
-      System.out.println("repaint in first clk");
+      //System.out.println("repaint in first clk");
       isClicked = true;
       return;
     }
@@ -72,7 +72,7 @@ public class MouseClick{
   public void secondClickSetup(int row, int column) {
     firstClk.setBackground(backgroundColor);
     firstClk.repaint();
-    grayRepaint();
+   // grayRepaint();
     pc.movePieceProcess(row, column);
     isClicked = false;
   }
@@ -81,7 +81,7 @@ public class MouseClick{
     // when border layout's piece click
     for(int i=0; i<YutGui.beginPiece.length; i++) {
       if (e.getSource().equals(YutGui.beginPiece[i])) {
-        System.out.printf("Begin piece clicked %d\n", i);
+        //System.out.printf("Begin piece clicked %d\n", i);
         firstClickSetup(i, 0);
       }
     }
@@ -91,7 +91,7 @@ public class MouseClick{
         System.out.println("it's null");
       }
       pc.rollYutProcess();
-      System.out.println("Roll yut clicked");
+      //System.out.println("Roll yut clicked");
     }
 
     for (int i=0; i<YutGui.testYutBtn.length; i++) {
@@ -107,11 +107,10 @@ public class MouseClick{
         if(e.getSource().equals(YutGui.btn[i][j])) {
           if (!isClicked) {
             firstClickSetup(i, j);
-            System.out.printf("click board %d , %d\n", i, j);
+            //System.out.printf("click board %d , %d\n", i, j);
           } else {
             secondClickSetup(i, j);
-            System.out.printf("Second click %d, %d \n", i, j);
-            pc.movePieceProcess(i,j);
+            //System.out.printf("Second click %d, %d \n", i, j);
           }
         }
       }

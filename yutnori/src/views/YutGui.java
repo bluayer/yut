@@ -53,7 +53,7 @@ public class YutGui {
   public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
 
   public void boardRepaint() {
-    System.out.println("Board Repaint");
+    //System.out.println("Board Repaint");
     for(int i = 1; i < 8; i++) {
       for (int j = 1; j < 8; j++) {
 
@@ -69,7 +69,7 @@ public class YutGui {
             BufferedImage[] pieceList = pieceSprite.pieceList;
             btn[i][j].setImage(pieceList[playerID]);
             btn[i][j].repaint();
-            System.out.println("Drawing piece for " + playerID);
+            //System.out.println("Drawing piece for " + playerID);
           }
         }
 

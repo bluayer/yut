@@ -204,6 +204,7 @@ public class YutNoRiSet {
     targetPiece.setOutOfBoard(false);
     nextCircle.setOccupied();
     lastCircle.resetCircle();
+    board.setAllUnChangeable();
     observable.firePropertyChange("move", true, false);
   }
 }
