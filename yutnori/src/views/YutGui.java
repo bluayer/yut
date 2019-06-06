@@ -119,8 +119,8 @@ public class YutGui {
         btn[i][j].setOpaque(true);
         // btn[i][j].addMouseListener(clickBridge);
 
-        if ((yutnoriset.isCircleClickable(i, j))) {
-          if(yutnoriset.isCircleChangeable(i,j)){
+        if ((yutnoriset.getBoard().getCircleByLocation(i, j).isClickable())) {
+          if(yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable()){
             btn[i][j].setBackground(Color.GREEN);
           } else {
             btn[i][j].setBackground(Color.DARK_GRAY);
@@ -153,7 +153,7 @@ public class YutGui {
       statusPanels.add(player[i]);
       statusPanels.add(beginPiece[i]);
       // Add number if player's left piece
-      statusPanels.add(new JLabel(Integer.toString(yutnoriset.howManyPiecesIsOutOfBoards(i))));
+      statusPanels.add(new JLabel(Integer.toString(yutnoriset.getPlayer().getNumOfPiecesOutOfBoard(i))));
       // beginPiece[i].addMouseListener(clickBridge);
     }
 
