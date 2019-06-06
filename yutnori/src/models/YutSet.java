@@ -26,6 +26,10 @@ public class YutSet {
       }
       cal++;
     }
+    if(cal == 0){
+      return 5;
+    }
+
 
     return cal;
   }
