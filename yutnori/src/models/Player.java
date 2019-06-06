@@ -56,6 +56,7 @@ public class Player {
           numOfLeftPieces++;
         }
       }
+      return numOfLeftPieces;
     } catch (NullPointerException e){
       /* error handle */
     }

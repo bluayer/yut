@@ -28,19 +28,18 @@ public class YutGui {
   static ImagePanel beginPiece[];
   public JButton yutBtn;
   private UIclick clickAction;
-  public BufferedImage[] pieceList = pieceSprite.pieceList;
+
   // private static UIclick clickBridge;
 
-  public YutGui() {
+  public YutGui(final models.YutNoRiSet yutSet) {
     midPanel = new BackGroundPanel();
-    yutnoriset = new YutNoRiSet(midPanel.getPlayerNumber(), midPanel.getPieceNumber());
+    yutnoriset = yutSet;
     mainFrame = new JFrame("Mode Selection");
     yutBoard= new JPanel();
     btn = new ImagePanel[8][8];
     yutBtn = new JButton("윷 던지기", setGIF());
     clickAction = new UIclick();
-    setPiecePanel(pieceList, clickAction);
-    setPlayerLabel();
+    pieceSprite = new PieceSprite();
   }
 
   private static void setPlayerLabel() {
@@ -60,7 +59,7 @@ public class YutGui {
     return ii;
   }
 
-  private static void setPiecePanel(BufferedImage[] pieceList, UIclick clickAct) {
+  private static void setPiecePanel(BufferedImage[] pieceList, UIclick clickAction) {
     ImagePanel piece1 = new ImagePanel();
     ImagePanel piece2 = new ImagePanel();
     ImagePanel piece3 = new ImagePanel();
@@ -71,18 +70,15 @@ public class YutGui {
     piece3.setImage(pieceList[2]);
     piece4.setImage(pieceList[3]);
 
-    piece1.addMouseListener(clickAct);
-    piece2.addMouseListener(clickAct);
-    piece3.addMouseListener(clickAct);
-    piece4.addMouseListener(clickAct);
+    piece1.addMouseListener(clickAction);
+    piece2.addMouseListener(clickAction);
+    piece3.addMouseListener(clickAction);
+    piece4.addMouseListener(clickAction);
 
     beginPiece = new ImagePanel[] { piece1, piece2, piece3, piece4};
   }
 
   public void setupStartUI(){
-    // Create max number of player and pieces for test
-    //yutnoriset.setOption(4, 5);
-
     mainFrame.setSize(FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.setLayout(new BorderLayout(10, 10));
@@ -96,7 +92,7 @@ public class YutGui {
   }
 
   public void setupYutGUI(int playerNumber, int pieceNumber) {
-    mainFrame.setTitle("Yut-No-Ri");
+    mainFrame = new JFrame("Game View");
     mainFrame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.setLocationRelativeTo(null);
@@ -110,23 +106,21 @@ public class YutGui {
     yutBoard.setBackground(Color.WHITE);
     yutBoard.setBorder(new EmptyBorder(30, 30, 30, 30));
 
-
-
-
     for(int i = 1; i < 8; i++) {
       for(int j = 1; j < 8; j++) {
-        // btn[i][j] = new ImagePanel();
+        btn[i][j] = new ImagePanel();
         btn[i][j].setOpaque(true);
         // btn[i][j].addMouseListener(clickBridge);
-
-        if ((yutnoriset.getBoard().getCircleByLocation(i, j).isClickable())) {
-          if(yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable()){
-            btn[i][j].setBackground(Color.GREEN);
+        if (yutnoriset.getBoard().getCircleByLocation(i, j) != null) {
+          if ((yutnoriset.getBoard().getCircleByLocation(i, j).isClickable())) {
+            if (yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable()) {
+              btn[i][j].setBackground(Color.GREEN);
+            } else {
+              btn[i][j].setBackground(Color.DARK_GRAY);
+            }
           } else {
-            btn[i][j].setBackground(Color.DARK_GRAY);
+            btn[i][j].setBackground(Color.WHITE);
           }
-        } else {
-          btn[i][j].setBackground(Color.WHITE);
         }
         btn[i][j].addMouseListener(clickAction);
         yutBoard.add(btn[i][j]);
@@ -148,12 +142,16 @@ public class YutGui {
     // It' for yut result image
     ImagePanel yutResultPanel = new ImagePanel();
 
+    BufferedImage[] pieceList = pieceSprite.pieceList;
+    setPiecePanel(pieceList, clickAction);
+    setPlayerLabel();
     // set Player name and Piece at the side border
     for (int i=0; i< playerNumber; i++) {
       statusPanels.add(player[i]);
       statusPanels.add(beginPiece[i]);
       // Add number if player's left piece
-      statusPanels.add(new JLabel(Integer.toString(yutnoriset.getPlayer().getNumOfPiecesOutOfBoard(i))));
+
+      statusPanels.add(new JLabel(Integer.toString(yutnoriset.getPlayer().getLeftNumOfPieceOfPlayer(i))));
       // beginPiece[i].addMouseListener(clickBridge);
     }
 

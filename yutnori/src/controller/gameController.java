@@ -17,8 +17,10 @@ public class gameController {
     public static int pieceNumber;
     public static processController c;
     public static void main(String[] args) throws IOException {
-        YutGui yutgui = new YutGui();
         final models.YutNoRiSet yutSet = new YutNoRiSet();
+        YutGui yutgui = new YutGui(yutSet);
+
+
 
         yutgui.setupStartUI();
         BackGroundPanel midP =yutgui.midPanel;
@@ -29,9 +31,11 @@ public class gameController {
                 yutgui.mainFrame.setVisible(false);
 
                 if (e.getSource().equals(midP.enter)) {
-                    yutgui.setupYutGUI(playerNumber, pieceNumber);
+                    midP.setPlayerNumber(Integer.parseInt(midP.playerNumberInput.getText()));
+                    midP.setPieceNumber(Integer.parseInt(midP.pieceNumberInput.getText()));
+                    yutSet.setPlayer(midP.getPlayerNumber(), midP.getPieceNumber());
+                    yutgui.setupYutGUI(midP.getPlayerNumber(), midP.getPieceNumber());
                 }
-                yutSet.setPlayer(midP.getPlayerNumber(), midP.getPieceNumber());
                 yutSet.setPlayerTurn(0);
                // c = new processController(yutSet, yutgui);
                 System.out.println("controller create");
