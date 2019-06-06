@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class processController {
     public YutGui yutGui;
-    public YutNoRiSet yutSet;
+    public YutNoRiSet yutnoriSet;
     public int flag = 0;
     public int currentTurn = 0;
     public int numCanMove = 0;
@@ -25,79 +25,143 @@ public class processController {
     //public MouseClick mClick;
     private static ArrayList<Integer> resultSet;
 
-//    public processController(YutNoRiSet set, YutGui gui){
-//        YutNoRiSet yutSet = set;
-//        yutSet.setPlayerTurn(0);
-//        YutGui yutGui= gui;
-//        System.out.println(yutSet.getNumOfPlayer());
-//        System.out.println(yutSet.getNumOfPiece());
-//        System.out.println("짜잔");
+    public processController(YutNoRiSet set, YutGui gui) {
+        yutnoriSet = set;
+        yutnoriSet.setPlayerTurn(0);
+        yutGui = gui;
+        System.out.println("짜잔");
+        System.out.println(yutnoriSet.getNumOfPiece() + "개의 피스");
+        System.out.println(yutnoriSet.getNumOfPlayer() + "명의 플레이어");
+    }
+
+    public int[] getClickedLocation(int i, int j) {
+        int[] location = new int[2];
+        location[0] = i;
+        location[1] = j;
+        return location;
+    }
+
+    /*BEFORE YUT ROLL STATE  FLAG = 0
+     *윷 또는 모가 나오기 전까지는 윷던지기 버튼을 계속 누를 수 있다.
+     * */
+    public void rollYutProcess(){
+        System.out.println("Roll Yut Btn pressed");
+        if (flag == 0) { //BEFORE YUT ROLL STATE 일 때만 윷 던지기가 동작 하도록.
+            currentTurn = yutnoriSet.getPlayerTurn();
+            int result;
+            result = yutnoriSet.getYutSet().rollYut();
+            numCanMove++;
+            System.out.println(result); //나온 결과를 순서대로 resultSet에 저장 해준다.
+            yutnoriSet.getPlayer().getPlayerResult(currentTurn).add(result);
+            if (result != 4 && result != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
+                flag = 1;
+            }
+            System.out.println(result + "가 나왔습니다");
+        }
+    }
+
+
+    /*BEFORE SELECT PIECE STATE FLAG = 1
+     * 윷을 던진 후 이동할 말을 선택하고 말을 선택하면 그 말이 어디로 갈 수 있는지 보여준다.
+     * */
+//    public void selectOutPieceProcess(){
+//        if(flag == 1){
+//            chosenPiece = getPieceFromOutOfBoard(yutnoriSet.getPlayerTurn()); // 눌려진 버튼으로 Piece id를 받아온다.
+//            showMovable(chosenPiece);
+//            flag = 2;
+//        }
+//    }
+//
+//    public void selectInPieceProcess(int row, int col){
+//        if(flag == 1){
+//            chosenPiece = yutnoriSet.getBoard().getCircleByLocation(row,col).getOccupyingPieces().get(0);
+//            showMovable(chosenPiece);
+//            flag = 2;
+//        }
+//    }
+//
+//    /*CHOICE PIECE STATE FLAG = 2
+//     * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
+//     * */
+//    public void movePieceProcess(int row, int col){
+//        if(flag == 2){
+//
+//        }
+//
 //    }
 
-//    public void gameProgress(int turn, models.YutNoRiSet set) {
+}
+
+
+//{
+//    public void gameProgress(models.YutNoRiSet set) {
+//        int[] clickedLocation;
 //        System.out.println("progress call");
-//        models.YutNoRiSet yutSet = set;
 //
 //        resultSet = new ArrayList<Integer>(); // player가 윷을 던진 결과들을 저장
 //
 //        boolean endCondition;
+//
 //        /*BEFORE YUT ROLL STATE  FLAG = 0
-//        *윷 또는 모가 나오기 전까지는 윷던지기 버튼을 계속 누를 수 있다.
-//        * */
+//         *윷 또는 모가 나오기 전까지는 윷던지기 버튼을 계속 누를 수 있다.
+//         * */
+//        System.out.println("hola");
 //        yutGui.yutBtn.addActionListener(new ActionListener() {
-//            public void actionPerformed (ActionEvent e){
-//                currentTurn = yutSet.getPlayerTurn();
-//                System.out.println("hi");
+//            public void actionPerformed(ActionEvent e) {
+//                currentTurn = yutnoriSet.getPlayerTurn();
+//                System.out.println("Roll Yut Btn pressed");
 //                int result;
-//                if(flag == 0){ //BEFORE YUT ROLL STATE 일 때만 윷 던지기가 동작 하도록.
-//                    result = yutSet.rollYut();
+//                if (flag == 0) { //BEFORE YUT ROLL STATE 일 때만 윷 던지기가 동작 하도록.
+//                    result = yutnoriSet.getYutSet().rollYut();
 //                    numCanMove++;
 //                    System.out.println(result);
 //                    resultSet.add(result); //나온 결과를 순서대로 resultSet에 저장 해준다.
-//                    if(result != 4 && result != 0){ // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
+//                    if (result != 4 && result != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
 //                        flag = 1;
 //                    }
+//                    System.out.println(result + "가 나왔습니다");
 //                }
 //            }
 //        });
-
-        /*BEFORE SELECT PIECE STATE FLAG = 1
-        * 윷을 던진 후 이동할 말을 선택하고 말을 선택하면 그 말이 어디로 갈 수 있는지 보여준다.
-        * */
-        // player는 아직 판에 올려지지 않은 남은 말들 중 하나를 선택 할 수있다.
-        // 현재 턴인 플레이어의 말만 선택 할 수 있어야 한다.
-//        yutGui.(아직 판에 올려지지 않은 piece).addActionListener(new ActionListener() {
+//
+//        /*BEFORE SELECT PIECE STATE FLAG = 1
+//         * 윷을 던진 후 이동할 말을 선택하고 말을 선택하면 그 말이 어디로 갈 수 있는지 보여준다.
+//         * */
+//        // player는 아직 판에 올려지지 않은 남은 말들 중 하나를 선택 할 수있다.
+//        // 현재 턴인 플레이어의 말만 선택 할 수 있어야 한다.
+//        yutGui.beginPiece[yutnoriSet.getPlayerTurn()].addMouseListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                if (flag == 1) { // BEFORE SELECT PIECE STATE 일 때만 동작 하도록
+//                    chosenPiece = getPieceFromOutOfBoard(yutnoriSet.getPlayerTurn()); // 눌려진 버튼으로 Piece id를 받아온다.
+//                    //먼저 어디로 이동 할 지 보여준다.
+//                    showMovable(resultSet, chosenPiece);
+//                    flag = 2;
+//                }
+//            }
+//        });
+//
+//        /*second click시 해제 ? */
+//
+//        //player는 판 위에 올려져있는 말들 중 하나를 선택 할 수 있다.
+//        yutGui..addMouseListener(new ActionListener() {
 //            public void actionPerformed (ActionEvent e){
 //                if(flag == 1){ // BEFORE SELECT PIECE STATE 일 때만 동작 하도록
-//                    chosenPiece = ; // 눌려진 버튼으로 Piece id를 받아온다.
+//                    chosenPiece = getPieceFromOutOfBoard
 //                    //먼저 어디로 이동 할 지 보여준다.
-//                    showMovable(resultSet, chosenPiece, yutSet);
+//                    showMovable(resultSet, chosenPicecId);
 //                    flag=2;
 //                }
 //            }
 //        });
-
-        /*second click시 해제 ? */
-
-        //player는 판 위에 올려져있는 말들 중 하나를 선택 할 수 있다.
-//        yutGui.(판 위에 있는 piece).addActionListener(new ActionListener() {
-//            public void actionPerformed (ActionEvent e){
-//                if(flag == 1){ // BEFORE SELECT PIECE STATE 일 때만 동작 하도록
-//                    //먼저 어디로 이동 할 지 보여준다.
-//                    showMovable(resultSet, chosenPicecId, yutSet);
-//                    flag=2;
-//                }
-//            }
-//        });
-
+//    }
         /*CHOICE PIECE STATE FLAG = 2
          * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
          * */
-//
-//    /* game progress 종료*/ yutGui.(highlighting 된 circle중 하나).addActionListener(new ActionListener() {
+//      yutGui.(highlighting 된 circle중 하나).addActionListener(new ActionListener() {
 //            public void actionPerformed (ActionEvent e){
 //                int[] moveLocation;
 //                if(flag == 2) { // CHOICE PIECE STATE 일 때만 동작 하도록
+//                    int selectedResult = 선택된서클();
 //                    moveLocation = yutSet.getLocationByCircle(chosenPiece); // 이동할 수 있는 circle을 선택하면 circle을 이용해 row, col을 받아오는 getLocationByCircle 함수 필요.
 //
 //                    switch (checkMovingPosition(chosenPiece, moveLocation[0], moveLocation[1])) {
@@ -206,7 +270,6 @@ public class processController {
 //    }
         //setChanged();
         //notifyObservers();
-}
 
 //
 //       do {
