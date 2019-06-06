@@ -8,6 +8,8 @@ public class Player {
   private int pieceNumber;
   private int playerNumber;
 
+  private ArrayList<ArrayList<Integer>> playerResult;
+
   Player(int playerNumber, int pieceNumber){
     this.playerNumber = playerNumber;
     this.pieceNumber = pieceNumber;
@@ -90,5 +92,20 @@ public class Player {
       }
     }
     return numOfPieceLocateInOutOfBoard;
+  }
+
+  public int getPieceFromOutOfBoard(int playerId){
+    int pieceIdOfPlayer = 0;
+    for(Piece i : getPlayerPieces(playerId)){
+      if(i.isOutOfBoard()){
+        return pieceIdOfPlayer;
+      }
+      pieceIdOfPlayer++;
+    }
+    return -1;
+  }
+
+  public ArrayList<Integer> getPlayerResult(int playerId) {
+    return playerResult.get(playerId);
   }
 }

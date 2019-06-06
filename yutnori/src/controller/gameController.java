@@ -34,7 +34,6 @@ public class gameController {
                     midP.setPlayerNumber(Integer.parseInt(midP.playerNumberInput.getText()));
                     midP.setPieceNumber(Integer.parseInt(midP.pieceNumberInput.getText()));
                     yutSet.setPlayer(midP.getPlayerNumber(), midP.getPieceNumber());
-                    yutgui.setupYutGUI(midP.getPlayerNumber(), midP.getPieceNumber());
                 }
                 yutSet.setPlayerTurn(0);
                // c = new processController(yutSet, yutgui);

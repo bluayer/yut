@@ -6,6 +6,9 @@ public class YutSet {
 
   public YutSet(){
     yutSet = new Yut[4];
+    for(int i = 0; i < YUTSETSIZE; i++){
+      yutSet[i] = new Yut();
+    }
   }
 
   public int rollYut(){
