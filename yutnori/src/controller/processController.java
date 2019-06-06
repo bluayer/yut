@@ -64,21 +64,22 @@ public class processController {
     /*BEFORE SELECT PIECE STATE FLAG = 1
      * 윷을 던진 후 이동할 말을 선택하고 말을 선택하면 그 말이 어디로 갈 수 있는지 보여준다.
      * */
-//    public void selectOutPieceProcess(){
-//        if(flag == 1){
-//            chosenPiece = getPieceFromOutOfBoard(yutnoriSet.getPlayerTurn()); // 눌려진 버튼으로 Piece id를 받아온다.
-//            showMovable(chosenPiece);
-//            flag = 2;
-//        }
-//    }
-//
-//    public void selectInPieceProcess(int row, int col){
-//        if(flag == 1){
-//            chosenPiece = yutnoriSet.getBoard().getCircleByLocation(row,col).getOccupyingPieces().get(0);
-//            showMovable(chosenPiece);
-//            flag = 2;
-//        }
-//    }
+    public void selectOutOfBoardPieceProcess(){
+        if(flag == 1){
+            chosenPiece = getPieceFromOutOfBoard(yutnoriSet.getPlayerTurn()); // 눌려진 버튼으로 Piece id를 받아온다.
+            showMovable(chosenPiece);
+            flag = 2;
+        }
+    }
+
+    public void selectInTheBoardPieceProcess(int row, int col){
+        if(flag == 1){
+            chosenPiece = yutnoriSet.getBoard().getCircleByLocation(row,col).getOccupyingPieces().get(0);
+            showMovable(chosenPiece);
+            flag = 2;
+        }
+    }
+
 //
 //    /*CHOICE PIECE STATE FLAG = 2
 //     * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
