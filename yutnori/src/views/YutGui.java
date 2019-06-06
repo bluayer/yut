@@ -50,19 +50,15 @@ public class YutGui {
     testYutBtn = makeTestYutBtn();
   }
 
-  public class ModelChangeListener implements PropertyChangeListener {
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-      System.out.println("Hey hey");
-      boardRepaint();
-    }
-  }
-
   public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
 
   public void boardRepaint() {
     for(int i = 1; i < 8; i++) {
       for (int j = 1; j < 8; j++) {
+        if(yutnoriset.getBoard().getCircleByLocation(i,j) == null){
+          continue;
+        }
+
         if (yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable()) {
           btn[i][j].setBackground(Color.GREEN);
           btn[i][j].repaint();
@@ -70,6 +66,14 @@ public class YutGui {
       }
     }
   }
+  public class ModelChangeListener implements PropertyChangeListener {
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      boardRepaint();
+    }
+  }
+
+  public ModelChangeListener modelListner  = new ModelChangeListener();
 
   private JButton[] makeTestYutBtn() {
     JButton [] test = new JButton[6];

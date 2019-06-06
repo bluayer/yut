@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.beans.PropertyChangeEvent;
 
 public class YutNoRiSet {
   private Player player;
@@ -48,7 +49,7 @@ public class YutNoRiSet {
     this.numOfPiece = numberOfPiece;
   }
 
-  public void addObservar(PropertyChangeListener observer){
+  public void addObserver(PropertyChangeListener observer){
     this.observable.addPropertyChangeListener(observer);
   }
 
@@ -174,6 +175,8 @@ public class YutNoRiSet {
         board.getCircleByCircleId(nextMovableCircleIds[1]).setChangeable();
       }
     }
+
+    observable.firePropertyChange("hello",false, true);
   }
 
   public void move(int pieceId, int row, int column){

@@ -100,7 +100,8 @@ public class Player {
     int pieceIdOfPlayer = 0;
     for(Piece i : getPlayerPieces(playerId)){
       if(i.isOutOfBoard()){
-        return pieceIdOfPlayer;
+        if(!i.isGone())
+          return pieceIdOfPlayer;
       }
       pieceIdOfPlayer++;
     }

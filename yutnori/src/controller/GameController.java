@@ -18,6 +18,7 @@ public class GameController {
     public static void main(String[] args) throws IOException {
         final models.YutNoRiSet yutSet = new YutNoRiSet();
         YutGui yutgui = new YutGui(yutSet);
+        yutSet.addObserver(yutgui.modelListner);
 
         yutgui.setupStartUI();
 
