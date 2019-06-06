@@ -1,5 +1,8 @@
 package views;
 
+import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 
@@ -29,14 +32,10 @@ public class MouseClick{
     // Click before start piece, so controller know who's piece selected.
     if(column == 0) {
       // set~~~(row); // call contoller's method that passing firstClick's player
+      firstClk = YutGui.beginPiece[row];
+      isClicked = true;
       return;
     } else { // Click board
-      // Check button's image is null
-      /*
-      if (YutGui.btn[row][column].getImage() == null) {
-        return;
-      }
-      */
 
       // setting firstClick
       firstClk = YutGui.btn[row][column];
@@ -51,9 +50,9 @@ public class MouseClick{
 
   public void secondClickSetup(int row, int column) {
     firstClk.setBackground(backgroundColor);
+    firstClk.repaint();
     // set~~~(row, column) // call controller's method that passing secondClick btn in board
     isClicked = false;
-
   }
 
   public void mouseInput(MouseEvent e) {
@@ -62,6 +61,16 @@ public class MouseClick{
       if (e.getSource().equals(YutGui.beginPiece[i])) {
         System.out.printf("Begin piece clicked %d\n", i);
         firstClickSetup(i, 0);
+      }
+    }
+
+    if (e.getSource().equals(YutGui.yutBtn)) {
+      System.out.println("Roll yut clicked");
+    }
+
+    for (int i=0; i<YutGui.testYutBtn.length; i++) {
+      if (e.getSource().equals(YutGui.testYutBtn[i])) {
+        System.out.printf("Test roll yut clicked %d\n", i);
       }
     }
 
@@ -80,7 +89,4 @@ public class MouseClick{
       }
     }
   }
-
-
-
 }

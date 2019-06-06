@@ -28,7 +28,7 @@ public class gameController {
         yutgui.midPanel.enter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                yutgui.mainFrame.setVisible(false);
+                yutgui.initFrame.setVisible(false);
 
                 if (e.getSource().equals(midP.enter)) {
                     midP.setPlayerNumber(Integer.parseInt(midP.playerNumberInput.getText()));
