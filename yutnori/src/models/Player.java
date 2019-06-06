@@ -72,7 +72,6 @@ public class Player {
 
   // return player id who's pieces are all get to the finish line
   public int getWinnerPlayerId(){
-    int id = -1;
     for(int i = 0; i < playerNumber; i++) {
       int numOfGonePiece = 0;
       for (Piece j : players.get(i)) {
@@ -80,12 +79,11 @@ public class Player {
           numOfGonePiece++;
         }
       }
-      if(numOfGonePiece == 0){
-        id = numOfGonePiece;
-        break;
+      if(numOfGonePiece == pieceNumber){
+        return i;
       }
     }
-    return id;
+    return -1;
   }
 
   public int getNumOfPiecesOutOfBoard(int playerId){

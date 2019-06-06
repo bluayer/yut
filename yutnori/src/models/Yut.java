@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class Yut {
 
-
   private boolean status;
+  Random generate = new Random();
 
   Yut(){
     status = true;
@@ -16,7 +16,6 @@ public class Yut {
   }
 
   public boolean throwYut(){
-    Random generate = new Random();
     status = generate.nextBoolean();
     return status;
   }
