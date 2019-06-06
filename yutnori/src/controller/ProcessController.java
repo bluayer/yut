@@ -21,9 +21,8 @@ public class ProcessController {
     public int currentTurn = 0;
     public int numCanMove = 0;
     public int catchPoint = 0;
-    public int chosenPiece;
+    public int chosenPiece = -1;
     //public MouseClick mClick;
-    private static ArrayList<Integer> resultSet;
 
     public ProcessController(YutNoRiSet set, YutGui gui) {
         yutnoriSet = set;
@@ -32,13 +31,6 @@ public class ProcessController {
         System.out.println("짜잔");
         System.out.println(yutnoriSet.getNumOfPiece() + "개의 피스");
         System.out.println(yutnoriSet.getNumOfPlayer() + "명의 플레이어");
-    }
-
-    public int[] getClickedLocation(int i, int j) {
-        int[] location = new int[2];
-        location[0] = i;
-        location[1] = j;
-        return location;
     }
 
     /*BEFORE YUT ROLL STATE  FLAG = 0
@@ -80,16 +72,31 @@ public class ProcessController {
         }
     }
 
-//
-//    /*CHOICE PIECE STATE FLAG = 2
-//     * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
-//     * */
-//    public void movePieceProcess(int row, int col){
-//        if(flag == 2){
-//
-//        }
-//
-//    }
+     /*CHOICE PIECE STATE FLAG = 2
+     * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
+     * */
+    public void movePieceProcess(int row, int col){
+        if(flag == 2){
+            int[] moveLocation;
+            if(yutnoriSet.tryCatch(chosenPiece, row, col)){
+                catchPoint++;
+            }
+            yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(yutnoriSet.getClickedResult(chosenPiece, row,col));
+            yutnoriSet.move(chosenPiece, row, col);
+            numCanMove--;
+
+            /*Decision*/
+            if (numCanMove >= 1 && catchPoint == 0) { // 아직 움직일 수 있는 횟수가 남았고 잡은 말이 없다면 BEFORE SELECT PIECE STATE로 변경함
+                flag = 1;
+            } else if (numCanMove == 0 && catchPoint == 0) { // 움직일수 있는 횟수가 없고 잡은 말이 없다면 턴을 종료하고 다음 player에게 턴을 넘김.
+                yutnoriSet.setPlayerTurn((yutnoriSet.getPlayerTurn() % yutnoriSet.getNumOfPlayer()) + 1);
+                flag = 0;
+            } else if (catchPoint > 0) { // 상대 말을 잡았다면 BEFORE YUT ROLL STATE로 변경하여 다시 윷을 던질 수 있게 함.
+                catchPoint--;
+                flag = 0;
+            }
+        }
+    }
 
 }
 
