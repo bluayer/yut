@@ -3,7 +3,8 @@ package views;
 
 import controller.ProcessController;
 import models.YutNoRiSet;
-
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -47,6 +48,14 @@ public class YutGui {
     pieceSprite = new PieceSprite();
     yutResultPanel = new ImagePanel();
     testYutBtn = makeTestYutBtn();
+  }
+
+  public class ModelChangeListener implements PropertyChangeListener {
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      System.out.println("Hey hey");
+      boardRepaint();
+    }
   }
 
   public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
