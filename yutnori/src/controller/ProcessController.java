@@ -100,7 +100,7 @@ public class ProcessController {
    * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
    * */
   public void movePieceProcess(int row, int col) {
-    if (flag == 2) {
+    if (flag == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
       int[] moveLocation;
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
         catchPoint++;
