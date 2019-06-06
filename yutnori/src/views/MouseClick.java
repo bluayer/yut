@@ -1,6 +1,7 @@
 package views;
 
 import controller.ProcessController;
+import models.YutNoRiSet;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -14,12 +15,14 @@ public class MouseClick{
   public ImagePanel firstClk, secondClk;
   boolean isClicked;
   private ProcessController pc;
+  private YutNoRiSet yutset;
 
-  public MouseClick() {
+  public MouseClick(final models.YutNoRiSet yutSet) {
     firstClk = null;
     secondClk = null;
     isClicked = false;
     backgroundColor = Color.DARK_GRAY;
+    yutset = yutSet;
   }
 
   // Init variables
@@ -47,15 +50,30 @@ public class MouseClick{
       firstClk.repaint();
       System.out.println("repaint in first clk");
       isClicked = true;
-      // set~~~(row, column) // call controller's method that passing firstClick's player
       return;
+    }
+  }
+
+  public void grayRepaint() {
+    for(int i = 1; i < 8; i++) {
+      for (int j = 1; j < 8; j++) {
+        if(yutset.getBoard().getCircleByLocation(i,j) == null){
+          continue;
+        }
+
+        if (yutset.getBoard().getCircleByLocation(i, j).isChangeable()) {
+          YutGui.btn[i][j].setBackground(Color.DARK_GRAY);
+          YutGui.btn[i][j].repaint();
+        }
+      }
     }
   }
 
   public void secondClickSetup(int row, int column) {
     firstClk.setBackground(backgroundColor);
     firstClk.repaint();
-    // set~~~(row, column) // call controller's method that passing secondClick btn in board
+    grayRepaint();
+    pc.movePieceProcess(row, column);
     isClicked = false;
   }
 

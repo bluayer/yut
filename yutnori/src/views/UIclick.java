@@ -1,10 +1,15 @@
 package views;
 
+import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 class UIclick implements MouseListener{
-  MouseClick mouseClick = new MouseClick();
+  MouseClick mouseClick;
+
+  public UIclick(final models.YutNoRiSet yutSet) {
+    mouseClick = new MouseClick(yutSet);
+  }
   @Override
   public void mouseClicked(MouseEvent e) {
     mouseClick.mouseInput(e);

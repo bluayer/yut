@@ -42,7 +42,7 @@ public class YutGui {
     initFrame = new JFrame("Game View");
     yutBoard= new JPanel();
     btn = new ImagePanel[8][8];
-    clickAction = new UIclick();
+    clickAction = new UIclick(yutSet);
     yutBtn = new JButton("윷 던지기", setGIF());
     yutBtn.addMouseListener(clickAction);
     pieceSprite = new PieceSprite();
@@ -53,10 +53,24 @@ public class YutGui {
   public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
 
   public void boardRepaint() {
+    System.out.println("Board Repaint");
     for(int i = 1; i < 8; i++) {
       for (int j = 1; j < 8; j++) {
+
         if(yutnoriset.getBoard().getCircleByLocation(i,j) == null){
           continue;
+        }
+
+        if(yutnoriset.getBoard().getCircleByLocation(i,j).isOccupied()) {
+          int numPiece = yutnoriset.getBoard().getCircleByLocation(i,j).getNumOfoccupyingPieces();
+          for (int k = 0; k < numPiece; k++) {
+            int pieceID = yutnoriset.getBoard().getCircleByLocation(i,j).getOccupyingPieces().get(0);
+            int playerID = pieceID / 10;
+            BufferedImage[] pieceList = pieceSprite.pieceList;
+            btn[i][j].setImage(pieceList[playerID]);
+            btn[i][j].repaint();
+            System.out.println("Drawing piece for " + playerID);
+          }
         }
 
         if (yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable()) {
@@ -66,6 +80,22 @@ public class YutGui {
       }
     }
   }
+
+  public void grayRepaint() {
+    for(int i = 1; i < 8; i++) {
+      for (int j = 1; j < 8; j++) {
+        if(yutnoriset.getBoard().getCircleByLocation(i,j) == null){
+          continue;
+        }
+
+        if (yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable()) {
+          btn[i][j].setBackground(Color.DARK_GRAY);
+          btn[i][j].repaint();
+        }
+      }
+    }
+  }
+
   public class ModelChangeListener implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
