@@ -105,7 +105,7 @@ public class ProcessController {
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
         catchPoint++;
       }
-      yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(yutnoriSet.getClickedResult(chosenPiece, row, col));
+      yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer) yutnoriSet.getClickedResult(chosenPiece, row, col));
       yutnoriSet.move(chosenPiece, row, col);
       numCanMove--;
 

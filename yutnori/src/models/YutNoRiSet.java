@@ -145,11 +145,16 @@ public class YutNoRiSet {
 
   public int getClickedResult(int pieceId, int row, int column){
     Piece targetPiece = player.getPieceByPieceId(pieceId);
-    Circle currentCircle = board.getCircleByLocation(targetPiece.getRow(), targetPiece.getColumn());
+    Circle currentCircle;
+    if(player.getPieceByPieceId(pieceId).isOutOfBoard()){
+      currentCircle = board.getCircleByLocation(7, 7);
+    }else {
+      currentCircle = board.getCircleByLocation(targetPiece.getRow(), targetPiece.getColumn());
+    }
     int nextCicleId = board.getCircleByLocation(row, column).getId();
-    int[][] getResult = ruleTable.nextMoveTable[currentCircle.getId()];
     for(int i = 0; i < 6; i++){
-      if(getResult[i][0] == nextCicleId  || getResult[i][1]  == nextCicleId) {
+      int[] getResult = ruleTable.nextMoveTable[currentCircle.getId()][i];
+      if(getResult[0] == nextCicleId  || getResult[1]  == nextCicleId) {
         return i;
       }
     }
@@ -181,8 +186,13 @@ public class YutNoRiSet {
 
   public void move(int pieceId, int row, int column){
     Piece targetPiece = player.getPieceByPieceId(pieceId);
-    Circle lastCircle =
-     board.getCircleByLocation(targetPiece.getRow(), targetPiece.getColumn());
+    Circle lastCircle;
+    if(targetPiece.isOutOfBoard()) {
+      lastCircle = board.getCircleByLocation(7, 7);
+      lastCircle.addOccupyingPieces(targetPiece.getId());
+    } else {
+      lastCircle = board.getCircleByLocation(targetPiece.getRow(), targetPiece.getColumn());
+    }
     Circle nextCircle = board.getCircleByLocation(row,column);
 
     for(int i : lastCircle.getOccupyingPieces()){
