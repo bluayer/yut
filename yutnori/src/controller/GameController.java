@@ -8,14 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import views.YutGui;
 import  views.BackGroundPanel;
 
 
-public class gameController {
+public class GameController {
     public static int playerNumber;
     public static int pieceNumber;
-    public static processController c;
+    public static ProcessController c;
     public static void main(String[] args) throws IOException {
         final models.YutNoRiSet yutSet = new YutNoRiSet();
         YutGui yutgui = new YutGui(yutSet);
@@ -36,9 +35,9 @@ public class gameController {
                     yutSet.setPlayer(midP.getPlayerNumber(), midP.getPieceNumber());
                 }
                 yutSet.setPlayerTurn(0);
-               // c = new processController(yutSet, yutgui);
+                c = new ProcessController(yutSet, yutgui);
                 System.out.println("controller create");
-                //c.gameProgress(yutSet.getPlayerTurn(), yutSet);
+                c.rollYutProcess();
             }
         });
 
