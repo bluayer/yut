@@ -17,17 +17,31 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 public class YutGui {
-  static final int FRAME_WIDTH = 1000, FRAME_HEIGHT = 1000;
+  final int FRAME_WIDTH = 1000, FRAME_HEIGHT = 1000;
+  public BackGroundPanel midPanel;
   public JFrame mainFrame;
   static ImagePanel btn[][];
-  public static JPanel yutBoard;
-  static YutNoRiSet yutnoriset = new YutNoRiSet();
-  static PieceSprite pieceSprite = new PieceSprite();
+  public JPanel yutBoard;
+  YutNoRiSet yutnoriset;
+  PieceSprite pieceSprite;
   static JLabel player[];
   static ImagePanel beginPiece[];
+  public JButton yutBtn;
+  private UIclick clickAction;
+  public BufferedImage[] pieceList = pieceSprite.pieceList;
   // private static UIclick clickBridge;
 
-  public BackGroundPanel midPanel;
+  public YutGui() {
+    midPanel = new BackGroundPanel();
+    yutnoriset = new YutNoRiSet(midPanel.getPlayerNumber(), midPanel.getPieceNumber());
+    mainFrame = new JFrame("Mode Selection");
+    yutBoard= new JPanel();
+    btn = new ImagePanel[8][8];
+    yutBtn = new JButton("윷 던지기", setGIF());
+    clickAction = new UIclick();
+    setPiecePanel(pieceList, clickAction);
+    setPlayerLabel();
+  }
 
   private static void setPlayerLabel() {
     JLabel player1 = new JLabel("Player 1");
@@ -35,6 +49,15 @@ public class YutGui {
     JLabel player3 = new JLabel("Player 3");
     JLabel player4 = new JLabel("Player 4");
     player = new JLabel[] { player1, player2, player3, player4};
+  }
+
+  private ImageIcon setGIF() {
+    ImageIcon ii = new ImageIcon(getClass().getResource("loadyut.gif"));
+
+    // resize image in button
+    ii.setImage(ii.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+
+    return ii;
   }
 
   private static void setPiecePanel(BufferedImage[] pieceList, UIclick clickAct) {
@@ -59,13 +82,12 @@ public class YutGui {
   public void setupStartUI(){
     // Create max number of player and pieces for test
     //yutnoriset.setOption(4, 5);
-    mainFrame = new JFrame("Mode Selection");
+
     mainFrame.setSize(FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.setLayout(new BorderLayout(10, 10));
     mainFrame.setLocationRelativeTo(null);
 
-    midPanel = new BackGroundPanel();
     midPanel.setGUI();
 
     mainFrame.add(midPanel);
@@ -74,7 +96,7 @@ public class YutGui {
   }
 
   public void setupYutGUI(int playerNumber, int pieceNumber) {
-    mainFrame = new JFrame("Yut-No-Ri");
+    mainFrame.setTitle("Yut-No-Ri");
     mainFrame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.setLocationRelativeTo(null);
@@ -84,17 +106,16 @@ public class YutGui {
 
 
     // set board
-    yutBoard= new JPanel();
     yutBoard.setLayout(new GridLayout(7, 7));
     yutBoard.setBackground(Color.WHITE);
     yutBoard.setBorder(new EmptyBorder(30, 30, 30, 30));
 
-    btn = new ImagePanel[8][8];
-    UIclick clickAction = new UIclick();
+
+
 
     for(int i = 1; i < 8; i++) {
       for(int j = 1; j < 8; j++) {
-        btn[i][j] = new ImagePanel();
+        // btn[i][j] = new ImagePanel();
         btn[i][j].setOpaque(true);
         // btn[i][j].addMouseListener(clickBridge);
 
@@ -122,30 +143,12 @@ public class YutGui {
     JPanel yutButtonPanels = new JPanel();
     yutButtonPanels.setBorder(new EmptyBorder(0, 30, 0, 30));
 
+    yutButtonPanels.add(yutBtn);
+
     // It' for yut result image
     ImagePanel yutResultPanel = new ImagePanel();
 
-    ImageIcon ii = new ImageIcon(getClass().getResource("loadyut.gif"));
-
-    // resize image in button
-    ii.setImage(ii.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
-    JButton yutBtn = new JButton("윷 던지기", ii);
-
-    yutBtn.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        // controller에서 윷 던졌음을 알리기
-        // System.out.print("hihi");
-      }
-    });
-
-    yutButtonPanels.add(yutBtn);
-
-    // For piece Sprite
-    BufferedImage[] pieceList = pieceSprite.pieceList;
-
     // set Player name and Piece at the side border
-    setPiecePanel(pieceList, clickAction);
-    setPlayerLabel();
     for (int i=0; i< playerNumber; i++) {
       statusPanels.add(player[i]);
       statusPanels.add(beginPiece[i]);

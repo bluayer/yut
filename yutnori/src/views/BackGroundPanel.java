@@ -47,6 +47,7 @@ public class BackGroundPanel extends JPanel{
     }
   }
 
+
   public void setGUI() {
     JLabel initialString = new JLabel("Yut-No-Ri");
 
