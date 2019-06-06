@@ -7,6 +7,9 @@ package models;
 
 import java.util.ArrayList;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 public class YutNoRiSet {
   private Player player;
   private Board board;
@@ -17,12 +20,14 @@ public class YutNoRiSet {
   int numOfPiece;
 
   private int playerTurn;
+  private PropertyChangeSupport observable;
 
   // Set board, ruleTable and yutSet, the setPlayer must be called to start the game.
   public YutNoRiSet(){
     board = new Board();
     yutSet = new YutSet();
     ruleTable = new RuleTable();
+    observable = new PropertyChangeSupport(this);
   }
 
   // Set board, yutSet, player and ruleTable with the parameters.
@@ -33,6 +38,7 @@ public class YutNoRiSet {
     ruleTable = new RuleTable();
     this.numOfPlayer = numOfPlayer;
     this.numOfPiece = numOfPiece;
+    observable = new PropertyChangeSupport(this);
   }
 
   // Make instance of Player with the parameters.
@@ -40,6 +46,10 @@ public class YutNoRiSet {
     player = new Player(numberOfPlayer, numberOfPiece);
     this.numOfPlayer = numberOfPlayer;
     this.numOfPiece = numberOfPiece;
+  }
+
+  public void addObservar(PropertyChangeListener observer){
+    this.observable.addPropertyChangeListener(observer);
   }
 
   public int getNumOfPlayer(){
