@@ -75,9 +75,9 @@ public class ProcessController {
     /*BEFORE SELECT PIECE STATE FLAG = 1
      * 윷을 던진 후 이동할 말을 선택하고 말을 선택하면 그 말이 어디로 갈 수 있는지 보여준다.
      * */
-    public void selectOutOfBoardPieceProcess(){
-        if(flag == 1){
-            chosenPiece = yutnoriSet.getPlayer().getPieceFromOutOfBoard(yutnoriSet.getPlayerTurn()); // 눌려진 버튼으로 Piece id를 받아온다.
+    public void selectOutOfBoardPieceProcess(int turn){
+        if(flag == 1 && (turn == currentTurn)){
+            chosenPiece = yutnoriSet.getPlayer().getPieceFromOutOfBoard(currentTurn); // 눌려진 버튼으로 Piece id를 받아온다.
             yutnoriSet.showMovable(chosenPiece);
             flag = 2;
         }

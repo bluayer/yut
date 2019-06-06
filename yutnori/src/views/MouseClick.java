@@ -35,7 +35,7 @@ public class MouseClick{
     initVars();
     // Click before start piece, so controller know who's piece selected.
     if(column == 0) {
-      // set~~~(row); // call contoller's method that passing firstClick's player
+      pc.selectOutOfBoardPieceProcess(row);
       firstClk = YutGui.beginPiece[row];
       isClicked = true;
       return;
