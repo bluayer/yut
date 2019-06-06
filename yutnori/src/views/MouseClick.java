@@ -78,6 +78,7 @@ public class MouseClick{
 
     for (int i=0; i<YutGui.testYutBtn.length; i++) {
       if (e.getSource().equals(YutGui.testYutBtn[i])) {
+        pc.rollYutTest(i);
         System.out.printf("Test roll yut clicked %d\n", i);
       }
     }
