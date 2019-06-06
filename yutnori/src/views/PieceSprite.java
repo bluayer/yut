@@ -1,6 +1,6 @@
 package views;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 public class PieceSprite {
   private String [] name = { "bPiece", "rPiece", "gPiece", "yPiece"};
   BufferedImage[] pieceList;
+  BufferedImage image = null;
 
   public PieceSprite() {
     try {
@@ -29,8 +30,15 @@ public class PieceSprite {
     String path = PieceSprite.class.getResource("").getPath();
 
     for (int i=0; i<name.length; i++) {
-      File file = new File(path + name[i] + ".png");
-      list[i] = ImageIO.read(file);
+      try {
+        File file = new File(path + name[i] + ".png");
+        image = new BufferedImage(20, 20, BufferedImage.TYPE_INT_ARGB);
+        image = ImageIO.read(file);
+        list[i] = image;
+      }
+      catch(IOException e){
+        System.out.println("Error: "+e);
+      }
     }
 
     return list;
