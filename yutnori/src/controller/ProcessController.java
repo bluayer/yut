@@ -14,7 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class processController {
+public class ProcessController {
     public YutGui yutGui;
     public YutNoRiSet yutnoriSet;
     public int flag = 0;
@@ -25,7 +25,7 @@ public class processController {
     //public MouseClick mClick;
     private static ArrayList<Integer> resultSet;
 
-    public processController(YutNoRiSet set, YutGui gui) {
+    public ProcessController(YutNoRiSet set, YutGui gui) {
         yutnoriSet = set;
         yutnoriSet.setPlayerTurn(0);
         yutGui = gui;
