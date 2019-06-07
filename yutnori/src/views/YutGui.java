@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -34,6 +36,11 @@ public class YutGui {
   static JButton yutBtn;
   private UIclick clickAction;
   private ImagePanel yutResultPanel;
+  public JPanel dialogPanel;
+  public JButton [] resButton;
+  public int willRemove;
+  public JDialog d;
+
 
   public YutGui(final models.YutNoRiSet yutSet) {
     midPanel = new BackGroundPanel();
@@ -48,9 +55,69 @@ public class YutGui {
     pieceSprite = new PieceSprite();
     yutResultPanel = new ImagePanel();
     testYutBtn = makeTestYutBtn();
+    dialogPanel = new JPanel();
   }
 
   public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
+
+  private String getYutType(int yut) {
+    String res = "";
+    switch(yut) {
+      case 0:
+        res = "빽도";
+        break;
+      case 1:
+        res = "도";
+        break;
+      case 2 :
+        res = "개";
+        break;
+      case 3:
+        res = "걸";
+        break;
+      case 4:
+        res = "윷";
+        break;
+      case 5:
+        res = "모";
+        break;
+    }
+    return res;
+  }
+
+  public void popUp(int curPlayerID) {
+
+    System.out.println("Popup work");
+    ArrayList<Integer> res = yutnoriset.getPlayer().getPlayerResult(curPlayerID);
+    d = new JDialog(mainFrame, "Select yut res");
+    JLabel l = new JLabel("Select yut res");
+
+    resButton = new JButton[res.size()];
+    for(int i = 0; i<res.size(); i++) {
+      resButton[i] = new JButton(Integer.toString(res.get(i)));
+      resButton[i].setText(getYutType(res.get(i)));
+//      resButton[i].addActionListener(new ActionListener() {
+//        @Override
+//        public void actionPerformed(ActionEvent e) {
+//          String s = e.getActionCommand();
+//          yutnoriset.getPlayer().getPlayerResult(curPlayerID).remove(Integer.parseInt(s));
+//          d.setVisible(false);
+//          yutnoriSet.getBoard().getCircleByLocation(row, col).resetCircle();
+//          if(yutnoriSet.getPlayer().getLeftNumOfPieceOfPlayer(currentTurn) <= 0){
+//            System.out.println("게임이 끝나야합니다~~~~");
+//          }
+//        }
+//        });
+      dialogPanel.add(resButton[i]);
+    }
+    d.add(l);
+    d.add(dialogPanel);
+    d.setSize(200, 200);
+    d.setLocation(200, 200);
+    d.setVisible(true);
+    d.repaint();
+    mainFrame.repaint();
+  }
 
   public void boardRepaint() {
     //System.out.println("Board Repaint");
