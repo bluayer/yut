@@ -1,6 +1,7 @@
 package controller;
 //import views.MouseClick;
 
+import com.sun.security.auth.NTUserPrincipal;
 import models.Circle;
 import models.Piece;
 import views.YutGui;
@@ -77,7 +78,9 @@ public class ProcessController {
 
       System.out.println(result + "가 나왔습니다");
       System.out.print("나온 목록 : ");
-
+      for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
+        System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
+      }
       System.out.println("");
       if (result != 4 && result != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
         System.out.println("움직일 말을 선택하세요!!!!!!!!!!!!!!!!!!!");
@@ -85,9 +88,7 @@ public class ProcessController {
       } else{
         System.out.println("한번 더 던질 수 있습니다!!!!!!!!!!!!!!!!!");
       }
-      for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
-        System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
-      }
+
     } else{
       System.out.println("윷 던지기 차례가 아닙니다!!!!!!!!!!!!!!!!!!!!");
     }
@@ -130,9 +131,38 @@ public class ProcessController {
     }
   }
 
-  /*CHOICE PIECE STATE FLAG = 2
+  public void decisionMaking() {
+    if (numCanMove >= 1 && catchPoint == 0) { // 아직 움직일 수 있는 횟수가 남았고 잡은 말이 없다면 BEFORE SELECT PIECE STATE로 변경함
+      yutnoriSet.setInGameFlag(1);
+      yutnoriSet.setBoardUnchangeable();
+    } else if (numCanMove == 0 && catchPoint == 0) { // 움직일수 있는 횟수가 없고 잡은 말이 없다면 턴을 종료하고 다음 player에게 턴을 넘김.
+      yutnoriSet.setPlayerTurn(((yutnoriSet.getPlayerTurn() + 1) % yutnoriSet.getNumOfPlayer()));
+      yutnoriSet.setInGameFlag(0);
+      yutnoriSet.setBoardUnchangeable();
+      currentTurn = yutnoriSet.getPlayerTurn();
+    } else if (catchPoint > 0) { // 상대 말을 잡았다면 BEFORE YUT ROLL STATE로 변경하여 다시 윷을 던질 수 있게 함.
+      catchPoint--;
+      yutnoriSet.setInGameFlag(0);
+      yutnoriSet.setBoardUnchangeable();
+    }
+  }
+
+  public void multiPossibleEnd(int result) {
+    try {
+      System.out.println("result called " + result);
+      yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer) result);
+
+      decisionMaking();
+    } catch (NullPointerException e){
+      System.out.println("multi possible End");
+    }
+  }
+
+
+
+  /** CHOICE PIECE STATE FLAG = 2
    * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
-   * */
+   */
   public void movePieceProcess(int row, int col) {
     System.out.println("Move  Flag : " + yutnoriSet.getInGameFlag() + " Turn :" + currentTurn);
     Integer resultValue;
@@ -153,53 +183,41 @@ public class ProcessController {
       // When the piece(s) reach to the end point.
       if (row == 7 && col == 7) {
         System.out.println("Player " + currentTurn + "의 말이 도착했습니다!");
-        for (int i = 0; i < yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().size(); i++) {
-          yutnoriSet.getPlayer().getPieceByLocation(7, 7).setGone();
+        for(int i : yutnoriSet.getBoard().getCircleByLocation(7,7).getOccupyingPieces()){
+          yutnoriSet.getPlayer().getPieceByPieceId(i).setGone();
         }
-        yutnoriSet.getBoard().getCircleByLocation(row, col).resetCircle();
-        if(yutnoriSet.getPlayer().getLeftNumOfPieceOfPlayer(currentTurn) <= 0){
-          System.out.println("게임이 끝나야합니다~~~~");
+        // call view function with currentTurn
+        if(yutnoriSet.getPlayer().getPlayerResult(currentTurn).size()> 1) {
+          yutGui.popUp(currentTurn, chosenPiece);
         }
+      } else {
+        removeSuceed = yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
+        System.out.println(resultValue);
+        if(removeSuceed == false){
+          // When first input as Do, then result value is same as Back Do.
+          // So the result value is 0.
+          if( resultValue == 0){
+            yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer)1);
+          }
+        }
+
+        decisionMaking();
       }
-
-
-
-      removeSuceed = yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
-      System.out.println(resultValue);
-      if(removeSuceed == false){
-        // When first input as Do, then result value is same as Back Do.
-        // So the result value is 0.
-        if( resultValue == 0){
-          yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer)1);
-        }
-      }
+      yutnoriSet.getBoard().getCircleByLocation(7,7).resetCircle();
 
       // debug
+      System.out.println("남은 목록 : ");
       for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
         System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
       }
       System.out.println("");
 
-      if (yutnoriSet.getPlayer().getWinnerPlayerId() != -1) {
+      System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId() + "가 승리!");
+      if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
+        System.out.println("게임이 끝났습니다!!!!! 승자 : Player" + currentTurn);
         //종료시켜야함
       }
-      /*Decision*/
-      if (numCanMove >= 1 && catchPoint == 0) { // 아직 움직일 수 있는 횟수가 남았고 잡은 말이 없다면 BEFORE SELECT PIECE STATE로 변경함
-        yutnoriSet.setInGameFlag(1);
-        yutnoriSet.setBoardUnchangeable();
-        return;
-      } else if (numCanMove == 0 && catchPoint == 0) { // 움직일수 있는 횟수가 없고 잡은 말이 없다면 턴을 종료하고 다음 player에게 턴을 넘김.
-        yutnoriSet.setPlayerTurn(((yutnoriSet.getPlayerTurn() + 1) % yutnoriSet.getNumOfPlayer()));
-        yutnoriSet.setInGameFlag(0);
-        yutnoriSet.setBoardUnchangeable();
-        currentTurn = yutnoriSet.getPlayerTurn();
-        return;
-      } else if (catchPoint > 0) { // 상대 말을 잡았다면 BEFORE YUT ROLL STATE로 변경하여 다시 윷을 던질 수 있게 함.
-        catchPoint--;
-        yutnoriSet.setInGameFlag(0);
-        yutnoriSet.setBoardUnchangeable();
-        return;
-      }
+
     } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
 
       System.out.println("Second click touch other thing");

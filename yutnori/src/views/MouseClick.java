@@ -8,6 +8,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.sql.SQLOutput;
 
 public class MouseClick{
   private Color clickedColor = new Color(0x41bdb5);
@@ -77,6 +78,39 @@ public class MouseClick{
       pc.rollYutProcess();
       //System.out.println("Roll yut clicked");
     }
+    for (int i = 0; i < YutGui.resButtonLength; i++) {
+      String result = YutGui.resButton[i].getText();
+      int removeNum = -1;
+      if(e.getSource().equals(YutGui.resButton[i])) {
+        switch (result) {
+          case "빽도":
+            removeNum = 0;
+            break;
+          case "도":
+            removeNum = 1;
+            break;
+          case "개":
+            removeNum = 2;
+            break;
+          case "걸":
+            removeNum = 3;
+            break;
+          case "윷":
+            removeNum = 4;
+            break;
+          case "모":
+            removeNum = 5;
+            break;
+        }
+
+        System.out.println("this is sensation " + removeNum);
+        pc.multiPossibleEnd(removeNum);
+        YutGui.d.setVisible(false);
+        YutGui.d = null;
+        YutGui.resButtonLength = 0;
+      }
+    }
+
 
     for (int i=0; i<YutGui.testYutBtn.length; i++) {
       if (e.getSource().equals(YutGui.testYutBtn[i])) {
