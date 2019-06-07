@@ -70,12 +70,14 @@ public class YutGui {
           System.out.println("Piece ID is " + pieceID + " and Player Id is " + playerID);
           BufferedImage[] pieceList = pieceSprite.pieceList;
           btn[i][j].setImage(pieceList[playerID]);
-          JLabel number = new JLabel();
-          number.setIcon(new ImageIcon(pieceList[playerID]));
-          number.setText(Integer.toString(numPiece));
-          number.setHorizontalTextPosition(JLabel.CENTER);
-          number.setVerticalTextPosition(JLabel.CENTER);
-          btn[i][j].add(number);
+//          JLabel number = new JLabel();
+//          number.setIcon(new ImageIcon(pieceList[playerID]));
+//          number.setText(Integer.toString(numPiece));
+//          number.setHorizontalTextPosition(JLabel.CENTER);
+//          number.setVerticalTextPosition(JLabel.CENTER);
+//          btn[i][j].add(number);
+        } else {
+          btn[i][j].setImage(null);
         }
 
         if (yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable()) {
