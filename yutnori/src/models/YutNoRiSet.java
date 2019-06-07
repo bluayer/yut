@@ -93,23 +93,27 @@ public class YutNoRiSet {
   // Return true if catch succeed, else return false.
   public boolean tryCatch(int pieceId, int row, int column){
     Piece targetPiece = player.getPieceByPieceId(pieceId);
-
+    boolean result = false;
     // Next circle.
     Circle nextCircle = board.getCircleByLocation(row,column);
-
+    Piece occupyingPiece = null;
     // Check if the next circle occupied.
     if(nextCircle.isOccupied()){
-      Piece occupyingPiece =
-        player.getPieceByPieceId(nextCircle.getOccupyingPieces().get(0));
-      // Check if the owner of that piece is different.
-      // if different, reset that circle and return true to represent catch succeed.
-      if(occupyingPiece.getOwnerId() != targetPiece.getOwnerId()){
-        occupyingPiece.resetPieceToOrigin();
-        nextCircle.clearOccupyingPieces();
-        return true;
+      for(int i : nextCircle.getOccupyingPieces()) {
+        occupyingPiece = player.getPieceByPieceId(i);
+        // Check if the owner of that piece is different.
+        // if different, reset that circle and return true to represent catch succeed.
+        if (occupyingPiece.getOwnerId() != targetPiece.getOwnerId()) {
+          occupyingPiece.resetPieceToOrigin();
+          result = true;
+        }
       }
     }
-    return false;
+
+    if(result){
+      nextCircle.resetCircle();
+    }
+    return result;
   }
 
   // Get movable circle from point of piece.
