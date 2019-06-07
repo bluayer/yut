@@ -58,7 +58,7 @@ public class Player {
     try{
       int numOfLeftPieces = 0;
       for(Piece i : getPlayerPieces(playerId)){
-        if(!i.isGone()){
+        if(!i.isGone() && !i.isOutOfBoard()){
           numOfLeftPieces++;
         }
       }

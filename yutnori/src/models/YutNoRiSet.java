@@ -82,6 +82,7 @@ public class YutNoRiSet {
 
   public void setPlayerTurn(int turn){
     this.playerTurn = turn;
+    observable.firePropertyChange("player change", false, true);
   }
 
   public RuleTable getRuleTable() {
@@ -225,5 +226,6 @@ public class YutNoRiSet {
 
   public void setInGameFlag(){
     inGameFlag = (inGameFlag+1)%3;
+    observable.firePropertyChange("turn change", false, true);
   }
 }
