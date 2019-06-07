@@ -132,7 +132,6 @@ public class ProcessController {
   public void movePieceProcess(int row, int col) {
     System.out.println("Move  Flag : " + flag + " Turn :" + currentTurn);
     if (flag == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
-      int[] moveLocation;
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
         catchPoint++;
       }
@@ -145,6 +144,7 @@ public class ProcessController {
       System.out.println("");
       yutnoriSet.move(chosenPiece, row, col);
       numCanMove--;
+      yutnoriSet.getMovable().clear();
 
       if (row == 7 && col == 7) {
         System.out.println("Player "+currentTurn+"의 말이 도착했습니다!");
