@@ -231,4 +231,11 @@ public class YutNoRiSet {
     inGameFlag = (inGameFlag+1)%3;
     observable.firePropertyChange("turn change", false, true);
   }
+
+  public void setBoardUnchangeable(){
+    for(int i = 0; i < 29; i++){
+      board.getCircleByCircleId(i).resetChangeable();
+    }
+    observable.firePropertyChange("unchange", true, false);
+  }
 }

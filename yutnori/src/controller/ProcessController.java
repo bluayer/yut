@@ -195,11 +195,7 @@ public class ProcessController {
     for(int i = 0; i < yutnoriSet.getMovable().size(); i++) {
       //System.out.println("Yut nori set in " + i + " with " + yutnoriSet.getMovable().get(i));
     }
-
-    //System.out.println("Last Move  Flag : " + flag + " Turn :" + currentTurn);
-
-    yutnoriSet.getBoard().setAllUnChangeable();
-    yutGui.boardRepaint();
+    yutnoriSet.setBoardUnchangeable();
   }
 
   public boolean checkEndGame() {

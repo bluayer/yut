@@ -22,25 +22,12 @@ public class YutSet {
     // Throw back do.
     if(!yutSet[YUTSETSIZE-1].throwYut()){
       if(cal == 0){
-        return -1;
+        return 0;
       }
       cal++;
     }
-    if(cal == 0){
-      return 5;
-    }
 
 
-    return cal;
-  }
-
-  public boolean[] getYutSetStatus(){
-    boolean[] yutStatus = new boolean[4];
-
-    for(int i = 0; i < 4; i++){
-      yutStatus[i] = yutSet[i].getStatus();
-    }
-
-    return yutStatus;
+    return cal+1;
   }
 }
