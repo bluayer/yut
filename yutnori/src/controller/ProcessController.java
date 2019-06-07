@@ -136,6 +136,7 @@ public class ProcessController {
   public void movePieceProcess(int row, int col) {
     System.out.println("Move  Flag : " + yutnoriSet.getInGameFlag() + " Turn :" + currentTurn);
     Integer resultValue;
+    boolean removeSuceed;
     if (yutnoriSet.getInGameFlag() == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
         catchPoint++;
@@ -161,7 +162,17 @@ public class ProcessController {
         }
       }
 
-      yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
+
+
+      removeSuceed = yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
+      System.out.println(resultValue);
+      if(removeSuceed == false){
+        // When first input as Do, then result value is same as Back Do.
+        // So the result value is 0.
+        if( resultValue == 0){
+          yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer)1);
+        }
+      }
 
       // debug
       for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
