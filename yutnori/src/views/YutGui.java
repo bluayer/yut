@@ -36,13 +36,15 @@ public class YutGui {
   static JButton yutBtn;
   private UIclick clickAction;
   private ImagePanel yutResultPanel;
+  private JLabel [] numberOutOfPiece;
+  private JLabel playerStatus;
+  private JLabel turnStatus;
+  private JLabel[][] groupingNum;
   public JPanel dialogPanel;
   static public JButton [] resButton;
   static int resButtonLength;
   public int willRemove;
   static public JDialog d;
-
-
 
   public YutGui(final models.YutNoRiSet yutSet) {
     midPanel = new BackGroundPanel();
@@ -57,6 +59,9 @@ public class YutGui {
     pieceSprite = new PieceSprite();
     yutResultPanel = new ImagePanel();
     testYutBtn = makeTestYutBtn();
+    playerStatus = new JLabel();
+    turnStatus = new JLabel();
+    groupingNum = new JLabel[8][8];
     dialogPanel = new JPanel();
     resButtonLength = 0;
   }
@@ -141,19 +146,19 @@ public class YutGui {
         if(yutnoriset.getBoard().getCircleByLocation(i,j).isOccupied()) {
           // numPiece is number of piece at board
           int numPiece = yutnoriset.getBoard().getCircleByLocation(i,j).getNumOfoccupyingPieces();
+          System.out.println("Num Piece is " + numPiece);
           //System.out.println(numPiece + " Piece at board at " + i + ", " + j);
           int pieceID = yutnoriset.getBoard().getCircleByLocation(i,j).getOccupyingPieces().get(0);
           int playerID = pieceID / 10;
           //System.out.println("Piece ID is " + pieceID + " and Player Id is " + playerID);
           BufferedImage[] pieceList = pieceSprite.pieceList;
           btn[i][j].setImage(pieceList[playerID]);
-//          JLabel number = new JLabel();
-//          number.setIcon(new ImageIcon(pieceList[playerID]));
-//          number.setText(Integer.toString(numPiece));
-//          number.setHorizontalTextPosition(JLabel.CENTER);
-//          number.setVerticalTextPosition(JLabel.CENTER);
-//          btn[i][j].add(number);
+          groupingNum[i][j].setText(Integer.toString(numPiece));
+          groupingNum[i][j].setForeground(Color.BLACK);
+          groupingNum[i][j].setHorizontalTextPosition(JLabel.CENTER);
+          groupingNum[i][j].setVerticalTextPosition(JLabel.CENTER);
         } else {
+          groupingNum[i][j].setText("");
           btn[i][j].setImage(null);
         }
 
@@ -161,11 +166,29 @@ public class YutGui {
           //System.out.println(i + ", " + j + " is " + yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable());
           btn[i][j].setBackground(Color.GREEN);
         } else {
-          btn[i][j].setBackground(Color.DARK_GRAY);
+          btn[i][j].setBackground(Color.decode("#eee6c4"));
         }
+        groupingNum[i][j].repaint();
         btn[i][j].repaint();
       }
     }
+    for(int i = 0;i <  numberOutOfPiece.length; i++) {
+      numberOutOfPiece[i].setText(Integer.toString(yutnoriset.getPlayer().getLeftNumOfPieceOfPlayer(i)));
+      numberOutOfPiece[i].repaint();
+    }
+
+    if (yutnoriset.getInGameFlag() == 0) {
+      playerStatus.setText("Player status : Throw yut plz");
+    } else if (yutnoriset.getInGameFlag() == 1) {
+      playerStatus.setText("Player status : Select piece");
+    } else if (yutnoriset.getInGameFlag() == 2) {
+      playerStatus.setText("Player status : Move piece");
+    }
+    turnStatus.setText("Turn status : Player " +yutnoriset.getPlayerTurn() + " turn");
+
+    playerStatus.repaint();
+    turnStatus.repaint();
+
   }
 
   public class ModelChangeListener implements PropertyChangeListener {
@@ -243,15 +266,17 @@ public class YutGui {
       for(int j = 1; j < 8; j++) {
         btn[i][j] = new ImagePanel();
         btn[i][j].setOpaque(true);
-        // btn[i][j].addMouseListener(clickBridge);
         if (yutnoriset.getBoard().getCircleByLocation(i, j) != null) {
           if ((yutnoriset.getBoard().getCircleByLocation(i, j).isClickable())) {
-              btn[i][j].setBackground(Color.DARK_GRAY);
-              btn[i][j].setBorder(new CompoundBorder(
-                      BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLUE),
-                      BorderFactory.createMatteBorder(1, 1, 1, 1, Color.RED)
-              ));
-              btn[i][j].addMouseListener(clickAction);
+            btn[i][j].setBackground(Color.decode("#eee6c4"));
+            btn[i][j].setBorder(new CompoundBorder(
+                    BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLUE),
+                    BorderFactory.createMatteBorder(1, 1, 1, 1, Color.RED)
+            ));
+            groupingNum[i][j] = new JLabel();
+            btn[i][j].add(groupingNum[i][j]);
+
+            btn[i][j].addMouseListener(clickAction);
           }
           else {
             btn[i][j].setBackground(Color.WHITE);
@@ -264,7 +289,7 @@ public class YutGui {
 
     JPanel statusPanels = new JPanel();
     // Fix outlook which is not compatible with name+image+number of piece.
-    statusPanels.setLayout(new GridLayout(playerNumber, 3));
+    statusPanels.setLayout(new GridLayout(2, 0));
     statusPanels.setBorder(new EmptyBorder(0, 30, 0, 30));
 
     /* Left side border */
@@ -276,19 +301,33 @@ public class YutGui {
     yutButtonPanels.add(yutResultPanel);
 
     BufferedImage[] pieceList = pieceSprite.pieceList;
+
     setPiecePanel(pieceList, clickAction);
     setPlayerLabel();
 
     for(int i=0; i<6; i++) {
       yutButtonPanels.add(testYutBtn[i]);
     }
+    numberOutOfPiece = new JLabel[playerNumber];
 
+    JPanel selectP = new JPanel();
+    selectP.setLayout(new GridLayout(playerNumber, 3));
+
+    JPanel stateP = new JPanel();
+    stateP.setLayout(new GridLayout(2 , 0));
+    stateP.add(playerStatus);
+    stateP.add(turnStatus);
+    statusPanels.add(stateP);
     // set Player name and Piece at the side border
     for (int i=0; i< playerNumber; i++) {
-      statusPanels.add(player[i]);
-      statusPanels.add(beginPiece[i]);
-      statusPanels.add(new JLabel(Integer.toString(yutnoriset.getPlayer().getLeftNumOfPieceOfPlayer(i))));
+      selectP.add(player[i]);
+      selectP.add(beginPiece[i]);
+      numberOutOfPiece[i] = new JLabel(Integer.toString(yutnoriset.getPlayer().getLeftNumOfPieceOfPlayer(i)));
+      selectP.add(numberOutOfPiece[i]);
     }
+
+    statusPanels.add(selectP);
+
 
     contentPane.add(yutButtonPanels,  BorderLayout.LINE_START);
     contentPane.add(statusPanels, BorderLayout.LINE_END);
