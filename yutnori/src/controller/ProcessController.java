@@ -156,13 +156,14 @@ public class ProcessController {
           yutnoriSet.getPlayer().getPieceByLocation(7, 7).setGone();
         }
         yutnoriSet.getBoard().getCircleByLocation(row, col).resetCircle();
+        if(yutnoriSet.getPlayer().getLeftNumOfPieceOfPlayer(currentTurn) <= 0){
+          System.out.println("게임이 끝나야합니다~~~~");
+        }
       }
-
 
       yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
 
       // debug
-      System.out.print("남은 목록 : ");
       for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
         System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
       }
@@ -171,10 +172,8 @@ public class ProcessController {
       if (yutnoriSet.getPlayer().getWinnerPlayerId() != -1) {
         //종료시켜야함
       }
-      System.out.println("NumCanMove : "+ numCanMove + " catchPoint : " + catchPoint);
       /*Decision*/
       if (numCanMove >= 1 && catchPoint == 0) { // 아직 움직일 수 있는 횟수가 남았고 잡은 말이 없다면 BEFORE SELECT PIECE STATE로 변경함
-        System.out.println(numCanMove + "번 더 움직일 수 있습니다.!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         yutnoriSet.setInGameFlag(1);
         yutnoriSet.setBoardUnchangeable();
         return;
@@ -182,16 +181,12 @@ public class ProcessController {
         yutnoriSet.setPlayerTurn(((yutnoriSet.getPlayerTurn() + 1) % yutnoriSet.getNumOfPlayer()));
         yutnoriSet.setInGameFlag(0);
         yutnoriSet.setBoardUnchangeable();
-        System.out.println("Player " + yutnoriSet.getPlayerTurn()+"에게 턴이 넘어갑니다!!!!!!! Flag : "+yutnoriSet.getInGameFlag());
-        System.out.println("");
-        System.out.println("Player" + yutnoriSet.getPlayerTurn() + " 윷을 던져주세요!");
         currentTurn = yutnoriSet.getPlayerTurn();
         return;
       } else if (catchPoint > 0) { // 상대 말을 잡았다면 BEFORE YUT ROLL STATE로 변경하여 다시 윷을 던질 수 있게 함.
         catchPoint--;
         yutnoriSet.setInGameFlag(0);
         yutnoriSet.setBoardUnchangeable();
-        System.out.println("말을 잡았습니다 한번 더 던지세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return;
       }
     } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
