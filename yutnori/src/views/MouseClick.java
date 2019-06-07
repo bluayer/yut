@@ -21,7 +21,7 @@ public class MouseClick{
     firstClk = null;
     secondClk = null;
     isClicked = false;
-    backgroundColor = Color.DARK_GRAY;
+    backgroundColor = Color.decode("#eee6c4");
     yutset = yutSet;
   }
 
