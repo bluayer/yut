@@ -76,11 +76,11 @@ public class Player {
     for(int i = 0; i < playerNumber; i++) {
       int numOfGonePiece = 0;
       for (Piece j : players.get(i)) {
-        if (j.isGone()) {
+        if (!j.isGone()) {
           numOfGonePiece++;
         }
       }
-      if(numOfGonePiece == pieceNumber){
+      if(numOfGonePiece == 0){
         return i;
       }
     }

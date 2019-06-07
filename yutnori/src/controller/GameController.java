@@ -27,18 +27,23 @@ public class GameController {
         yutgui.midPanel.enter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+              if (Integer.parseInt(midP.playerNumberInput.getText()) >= 2 && Integer.parseInt(midP.playerNumberInput.getText()) <= 4
+                      && Integer.parseInt(midP.pieceNumberInput.getText()) >= 2 && Integer.parseInt(midP.pieceNumberInput.getText()) <= 5) {
                 yutgui.initFrame.setVisible(false);
 
                 if (e.getSource().equals(midP.enter)) {
-                    midP.setPlayerNumber(Integer.parseInt(midP.playerNumberInput.getText()));
-                    midP.setPieceNumber(Integer.parseInt(midP.pieceNumberInput.getText()));
-                    yutSet.setPlayer(midP.getPlayerNumber(), midP.getPieceNumber());
-                    yutgui.setupYutGUI(midP.getPlayerNumber(), midP.getPieceNumber());
-                    yutSet.setPlayerTurn(0);
-                    processController = new ProcessController(yutSet, yutgui);
-                    yutgui.pcBridge(processController);
-                    System.out.println("controller create");
+                  midP.setPlayerNumber(Integer.parseInt(midP.playerNumberInput.getText()));
+                  midP.setPieceNumber(Integer.parseInt(midP.pieceNumberInput.getText()));
+                  yutSet.setPlayer(midP.getPlayerNumber(), midP.getPieceNumber());
+                  yutgui.setupYutGUI(midP.getPlayerNumber(), midP.getPieceNumber());
+                  yutSet.setPlayerTurn(0);
+                  processController = new ProcessController(yutSet, yutgui);
+                  yutgui.pcBridge(processController);
+                  System.out.println("controller create");
                 }
+              } else {
+                System.out.println("2~4명의 플레이어 수, 2~5개의 피스 수를 입력하세요.");
+              }
             }
         });
 

@@ -78,7 +78,9 @@ public class ProcessController {
 
       System.out.println(result + "가 나왔습니다");
       System.out.print("나온 목록 : ");
-
+      for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
+        System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
+      }
       System.out.println("");
       if (result != 4 && result != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
         System.out.println("움직일 말을 선택하세요!!!!!!!!!!!!!!!!!!!");
@@ -86,9 +88,7 @@ public class ProcessController {
       } else{
         System.out.println("한번 더 던질 수 있습니다!!!!!!!!!!!!!!!!!");
       }
-      for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
-        System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
-      }
+
     } else{
       System.out.println("윷 던지기 차례가 아닙니다!!!!!!!!!!!!!!!!!!!!");
     }
@@ -183,8 +183,8 @@ public class ProcessController {
       // When the piece(s) reach to the end point.
       if (row == 7 && col == 7) {
         System.out.println("Player " + currentTurn + "의 말이 도착했습니다!");
-        for (int i = 0; i < yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().size(); i++) {
-          yutnoriSet.getPlayer().getPieceByLocation(7, 7).setGone();
+        for(int i : yutnoriSet.getBoard().getCircleByLocation(7,7).getOccupyingPieces()){
+          yutnoriSet.getPlayer().getPieceByPieceId(i).setGone();
         }
         // call view function with currentTurn
         if(yutnoriSet.getPlayer().getPlayerResult(currentTurn).size()> 1) {
@@ -205,17 +205,16 @@ public class ProcessController {
       }
       yutnoriSet.getBoard().getCircleByLocation(7,7).resetCircle();
 
-
-
-
-
       // debug
+      System.out.println("남은 목록 : ");
       for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
         System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
       }
       System.out.println("");
 
-      if (yutnoriSet.getPlayer().getWinnerPlayerId() != -1) {
+      System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId() + "가 승리!");
+      if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
+        System.out.println("게임이 끝났습니다!!!!! 승자 : Player" + currentTurn);
         //종료시켜야함
       }
 
