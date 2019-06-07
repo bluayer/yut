@@ -164,7 +164,6 @@ public class ProcessController {
     try {
       System.out.println("result called " + result);
       yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer) result);
-
       decisionMaking();
     } catch (NullPointerException e){
       System.out.println("multi possible End");
@@ -180,12 +179,15 @@ public class ProcessController {
     //System.out.println("Move  Flag : " + yutnoriSet.getInGameFlag() + " Turn :" + currentTurn);
     System.out.println("Player"+ showTurn(catchPoint) +"의 말이 움직입니다!");
     Integer resultValue;
+    int numOfReachable = 0;
     boolean removeSuceed;
     if (yutnoriSet.getInGameFlag() == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
         catchPoint++;
       }
 
+      numCanMove--;
+      resultValue = yutnoriSet.getClickedResult(chosenPiece, row, col);
 
       // When the piece(s) reach to the end point.
       if (row == 7 && col == 7) {
@@ -199,12 +201,19 @@ public class ProcessController {
           //종료시켜야함
         }
         // call view function with currentTurn
-        if(yutnoriSet.getPlayer().getPlayerResult(currentTurn).size()> 1) {
+        for(int i : yutnoriSet.getPlayer().getPlayerResult(currentTurn)){
+          if(i >= resultValue){
+            numOfReachable++;
+          }
+        }
+        if(numOfReachable > 1) {
           System.out.println("popup called");
           yutGui.popUp(currentTurn, chosenPiece);
+        }else{
+          yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
+          decisionMaking();
         }
       } else {
-        resultValue = yutnoriSet.getClickedResult(chosenPiece, row, col);
         removeSuceed = yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
 
         if(removeSuceed == false){
@@ -223,9 +232,9 @@ public class ProcessController {
         decisionMaking();
       }
       yutnoriSet.move(chosenPiece, row, col);
-      numCanMove--;
       yutnoriSet.getMovable().clear();
       yutnoriSet.getBoard().getCircleByLocation(7,7).resetCircle();
+
 
       //System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId() + "가 승리!");
 
