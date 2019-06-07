@@ -198,6 +198,9 @@ public class YutNoRiSet {
 
 
   public void move(int pieceId, int row, int column){
+    for(int i = 0; i < player.getPlayerResult(playerTurn).size(); i++){
+      System.out.println(playerTurn + " " + player.getPlayerResult(playerTurn).get(i));
+    }
     Piece targetPiece = player.getPieceByPieceId(pieceId);
     Circle lastCircle;
     if(targetPiece.isOutOfBoard()) {

@@ -114,8 +114,8 @@ public class ProcessController {
   }
 
   public void selectInTheBoardPieceProcess(int row, int col) {
-    if (flag == 1 &&
-            currentTurn == (yutnoriSet.getPlayer().getPieceByPieceId(yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(0)).getOwnerId())) {
+    int ownerId = yutnoriSet.getPlayer().getPieceByLocation(row, col).getOwnerId();
+    if (flag == 1 && currentTurn == ownerId) {
       //System.out.println("Select Piece Flag : " + flag + "Turn :" + currentTurn);
       chosenPiece = yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(0);
       yutnoriSet.showMovable(chosenPiece);
@@ -131,28 +131,43 @@ public class ProcessController {
    * */
   public void movePieceProcess(int row, int col) {
     System.out.println("Move  Flag : " + flag + " Turn :" + currentTurn);
+    int playerResultSize;
+    boolean isRemovedOneResult;
     if (flag == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
         catchPoint++;
       }
-      yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer) yutnoriSet.getClickedResult(chosenPiece, row, col));
 
+
+      // move
+      yutnoriSet.move(chosenPiece, row, col);
+      numCanMove--;
+      yutnoriSet.getMovable().clear();
+      isRemovedOneResult =
+        yutnoriSet.getPlayer().getPlayerResult(currentTurn)
+          .remove((Integer) yutnoriSet.getClickedResult(chosenPiece, row, col));
+
+      // When the piece(s) reach to the end point.
+      if (row == 7 && col == 7) {
+        System.out.println("Player " + currentTurn + "의 말이 도착했습니다!");
+        for (int i = 0; i < yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().size(); i++) {
+          yutnoriSet.getPlayer().getPieceByLocation(7, 7).setGone();
+        }
+        yutnoriSet.getBoard().getCircleByLocation(row, col).resetCircle();
+      }
+
+
+      playerResultSize = yutnoriSet.getPlayer().getPlayerResult(currentTurn).size();
+      if(isRemovedOneResult == false){
+        yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(playerResultSize-1);
+      }
+
+      // debug
       System.out.print("남은 목록 : ");
       for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
         System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
       }
       System.out.println("");
-      yutnoriSet.move(chosenPiece, row, col);
-      numCanMove--;
-      yutnoriSet.getMovable().clear();
-
-      if (row == 7 && col == 7) {
-        System.out.println("Player "+currentTurn+"의 말이 도착했습니다!");
-        for (int i = 0; i < yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().size(); i++) {
-          yutnoriSet.getPlayer().getPieceByPieceId(yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(i)).setGone();
-        }
-        yutnoriSet.getBoard().getCircleByLocation(row, col).resetCircle();
-      }
 
       if (yutnoriSet.getPlayer().getWinnerPlayerId() != -1) {
         //종료시켜야함
