@@ -64,12 +64,12 @@ public class RuleTable {
     nextMoveTable[18][4][0] = 0;
     nextMoveTable[18][5][0] = 0;
 
-    nextMoveTable[18][0][0] = 18;
-    nextMoveTable[18][1][0] = 0;
-    nextMoveTable[18][2][0] = 0;
-    nextMoveTable[18][3][0] = 0;
-    nextMoveTable[18][4][0] = 0;
-    nextMoveTable[18][5][0] = 0;
+    nextMoveTable[19][0][0] = 18;
+    nextMoveTable[19][1][0] = 0;
+    nextMoveTable[19][2][0] = 0;
+    nextMoveTable[19][3][0] = 0;
+    nextMoveTable[19][4][0] = 0;
+    nextMoveTable[19][5][0] = 0;
 
     nextMoveTable[20][0][0] = 21;
     nextMoveTable[20][1][0] = 0;

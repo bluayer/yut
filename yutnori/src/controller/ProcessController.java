@@ -40,9 +40,6 @@ public class ProcessController {
     System.out.println("Roll Yut test!");
     if (flag == 0) { //BEFORE YUT ROLL STATE 일 때만 윷 던지기가 동작 하도록.
       currentTurn = yutnoriSet.getPlayerTurn();
-      if(numCanMove == 0 && res == 0){
-        return;
-      }
 
       yutnoriSet.getPlayer().getPlayerResult(currentTurn).add(res);
       numCanMove++;
@@ -67,9 +64,6 @@ public class ProcessController {
       //System.out.println("Roll Yut Flag : " + flag + "Turn :" + currentTurn);
       int result;
       result = yutnoriSet.getYutSet().rollYut();
-      if(numCanMove == 0 && result == 0){
-        return;
-      }
 
       numCanMove++;
 
@@ -114,7 +108,13 @@ public class ProcessController {
   }
 
   public void selectInTheBoardPieceProcess(int row, int col) {
-    int ownerId = yutnoriSet.getPlayer().getPieceByLocation(row, col).getOwnerId();
+    int ownerId;
+    try {
+      ownerId = yutnoriSet.getPlayer().getPieceByLocation(row, col).getOwnerId();
+    }catch(NullPointerException e){
+      System.out.println("Not piece on circle");
+      return;
+    }
     if (flag == 1 && currentTurn == ownerId) {
       //System.out.println("Select Piece Flag : " + flag + "Turn :" + currentTurn);
       chosenPiece = yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(0);
