@@ -131,8 +131,7 @@ public class ProcessController {
    * */
   public void movePieceProcess(int row, int col) {
     System.out.println("Move  Flag : " + flag + " Turn :" + currentTurn);
-    int playerResultSize;
-    boolean isRemovedOneResult;
+    Integer resultValue;
     if (flag == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
         catchPoint++;
@@ -140,12 +139,11 @@ public class ProcessController {
 
 
       // move
+      resultValue = yutnoriSet.getClickedResult(chosenPiece, row, col);
       yutnoriSet.move(chosenPiece, row, col);
       numCanMove--;
       yutnoriSet.getMovable().clear();
-      isRemovedOneResult =
-        yutnoriSet.getPlayer().getPlayerResult(currentTurn)
-          .remove((Integer) yutnoriSet.getClickedResult(chosenPiece, row, col));
+
 
       // When the piece(s) reach to the end point.
       if (row == 7 && col == 7) {
@@ -157,10 +155,7 @@ public class ProcessController {
       }
 
 
-      playerResultSize = yutnoriSet.getPlayer().getPlayerResult(currentTurn).size();
-      if(isRemovedOneResult == false){
-        yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(playerResultSize-1);
-      }
+      yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
 
       // debug
       System.out.print("남은 목록 : ");
