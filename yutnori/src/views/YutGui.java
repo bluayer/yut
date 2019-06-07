@@ -146,7 +146,6 @@ public class YutGui {
         if(yutnoriset.getBoard().getCircleByLocation(i,j).isOccupied()) {
           // numPiece is number of piece at board
           int numPiece = yutnoriset.getBoard().getCircleByLocation(i,j).getNumOfoccupyingPieces();
-          System.out.println("Num Piece is " + numPiece);
           //System.out.println(numPiece + " Piece at board at " + i + ", " + j);
           int pieceID = yutnoriset.getBoard().getCircleByLocation(i,j).getOccupyingPieces().get(0);
           int playerID = pieceID / 10;

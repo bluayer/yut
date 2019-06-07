@@ -62,7 +62,6 @@ public class Player {
           numOfLeftPieces++;
         }
       }
-      System.out.println("left piece" + numOfLeftPieces);
       return numOfLeftPieces;
     } catch (NullPointerException e){
       /* error handle */

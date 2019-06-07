@@ -60,7 +60,11 @@ public class MouseClick{
     if (!yutset.getMovable().contains(yutset.getBoard().getCircleByLocation(row, column).getId())) {
       initVars();
     }
-    pc.movePieceProcess(row, column);
+    if (pc.yutnoriSet.getInGameFlag() == 0) {
+      initVars();
+    } else {
+      pc.movePieceProcess(row, column);
+    }
 
     isClicked = false;
   }
