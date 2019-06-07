@@ -141,6 +141,8 @@ public class ProcessController {
         flag = 0;
       }
     }
+
+    yutnoriSet.setBoardUnchangeable();
   }
 
   public boolean checkEndGame() {

@@ -63,10 +63,5 @@ public class Board {
     return boards.get(circleId);
   }
 
-  public void setAllUnChangeable(){
-    for(Circle i : boards){
-      i.resetChangeable();
-    }
-  }
 
 }

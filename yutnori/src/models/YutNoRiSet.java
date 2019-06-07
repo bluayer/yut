@@ -206,4 +206,11 @@ public class YutNoRiSet {
     lastCircle.resetCircle();
     observable.firePropertyChange("move", true, false);
   }
+
+  public void setBoardUnchangeable(){
+    for(int i = 0; i < 29; i++){
+      board.getCircleByCircleId(i).resetChangeable();
+    }
+    observable.firePropertyChange("unchange", true, false);
+  }
 }
