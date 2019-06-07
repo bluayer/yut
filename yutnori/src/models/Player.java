@@ -96,14 +96,12 @@ public class Player {
     return numOfPieceLocateInOutOfBoard;
   }
 
-  public int getPieceFromOutOfBoard(int playerId){
-    int pieceIdOfPlayer = 0;
+  public int getPieceIdFromOutOfBoard(int playerId){
     for(Piece i : getPlayerPieces(playerId)){
       if(i.isOutOfBoard()){
         if(!i.isGone())
-          return pieceIdOfPlayer;
+          return i.getId();
       }
-      pieceIdOfPlayer++;
     }
     return -1;
   }

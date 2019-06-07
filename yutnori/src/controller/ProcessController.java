@@ -94,7 +94,7 @@ public class ProcessController {
   public void selectOutOfBoardPieceProcess(int turn){
     if(flag == 1 && (turn == currentTurn)){
       System.out.println("Select Piece Flag : " + flag + " Turn :" + currentTurn + "selected Piece : " + turn);
-      chosenPiece = yutnoriSet.getPlayer().getPieceFromOutOfBoard(currentTurn); // 눌려진 버튼으로 Piece id를 받아온다.
+      chosenPiece = yutnoriSet.getPlayer().getPieceIdFromOutOfBoard(currentTurn); // 눌려진 버튼으로 Piece id를 받아온다.
       yutnoriSet.showMovable(chosenPiece);
       flag = 2;
     }
