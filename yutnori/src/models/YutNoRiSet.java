@@ -5,6 +5,7 @@
 
 package models;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.beans.PropertyChangeListener;
@@ -19,6 +20,7 @@ public class YutNoRiSet {
 
   int numOfPlayer;
   int numOfPiece;
+  ArrayList<Integer> movable;
 
   private int playerTurn;
   private PropertyChangeSupport observable;
@@ -29,6 +31,7 @@ public class YutNoRiSet {
     yutSet = new YutSet();
     ruleTable = new RuleTable();
     observable = new PropertyChangeSupport(this);
+    movable = new ArrayList<Integer>();
   }
 
   // Set board, yutSet, player and ruleTable with the parameters.
@@ -165,25 +168,32 @@ public class YutNoRiSet {
     // Get player Piece and get the circle id of that location to use rule table.
     Piece targetPiece = player.getPieceByPieceId(pieceId);
     Circle currentCircle;
+    System.out.println("Piece is"  + pieceId);
     if(targetPiece.isOutOfBoard()) {
       currentCircle = board.getCircleByLocation(7, 7);
     } else {
       currentCircle = board.getCircleByLocation(targetPiece.getRow(), targetPiece.getColumn());
     }
     // Change circle state changeable.
-    System.out.println("showMovablecalled!");
+    System.out.println("showMovablecalled! current Circle is " + currentCircle.getId());
     for(int i : player.getPlayerResult(targetPiece.getOwnerId())){
       int[] nextMovableCircleIds = ruleTable.getNextMoveCircleIds(currentCircle.getId(), i);
 
       board.getCircleByCircleId(nextMovableCircleIds[0]).setChangeable();
+      board.getCircleByCircleId(nextMovableCircleIds[0]).getId();
+      movable.add(nextMovableCircleIds[0]);
       // If this is two way circle
       if(nextMovableCircleIds[1] != -1){
         board.getCircleByCircleId(nextMovableCircleIds[1]).setChangeable();
+        movable.add(nextMovableCircleIds[1]);
       }
     }
 
     observable.firePropertyChange("movable",false, true);
   }
+
+  public ArrayList<Integer> getMovable() { return movable; }
+
 
   public void move(int pieceId, int row, int column){
     Piece targetPiece = player.getPieceByPieceId(pieceId);
@@ -204,7 +214,7 @@ public class YutNoRiSet {
     targetPiece.setOutOfBoard(false);
     nextCircle.setOccupied();
     lastCircle.resetCircle();
-    board.setAllUnChangeable();
-    observable.firePropertyChange("move", true, false);
+    // board.setAllUnChangeable();
+    // observable.firePropertyChange("move", true, false);
   }
 }

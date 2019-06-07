@@ -91,14 +91,14 @@ public class ProcessController {
     /*BEFORE SELECT PIECE STATE FLAG = 1
      * 윷을 던진 후 이동할 말을 선택하고 말을 선택하면 그 말이 어디로 갈 수 있는지 보여준다.
      * */
-    public void selectOutOfBoardPieceProcess(int turn){
-        if(flag == 1 && (turn == currentTurn)){
-          System.out.println("Select Piece Flag : " + flag + "Turn :" + currentTurn);
-            chosenPiece = yutnoriSet.getPlayer().getPieceFromOutOfBoard(currentTurn); // 눌려진 버튼으로 Piece id를 받아온다.
-            yutnoriSet.showMovable(chosenPiece);
-            flag = 2;
-        }
+  public void selectOutOfBoardPieceProcess(int turn){
+    if(flag == 1 && (turn == currentTurn)){
+      System.out.println("Select Piece Flag : " + flag + " Turn :" + currentTurn + "selected Piece : " + turn);
+      chosenPiece = yutnoriSet.getPlayer().getPieceFromOutOfBoard(currentTurn); // 눌려진 버튼으로 Piece id를 받아온다.
+      yutnoriSet.showMovable(chosenPiece);
+      flag = 2;
     }
+  }
 
   public void selectInTheBoardPieceProcess(int row, int col) {
     if (flag == 1 &&
@@ -114,7 +114,7 @@ public class ProcessController {
    * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
    * */
   public void movePieceProcess(int row, int col) {
-    System.out.println("Move  Flag : " + flag + "Turn :" + currentTurn);
+    System.out.println("Move  Flag : " + flag + " Turn :" + currentTurn);
     if (flag == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
       int[] moveLocation;
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
@@ -140,7 +140,7 @@ public class ProcessController {
       if (yutnoriSet.getPlayer().getWinnerPlayerId() != -1) {
         //종료시켜야함
       }
-      System.out.println("NumCanMove : "+ numCanMove + "catchPoint : " + catchPoint);
+      System.out.println("NumCanMove : "+ numCanMove + " catchPoint : " + catchPoint);
       /*Decision*/
       if (numCanMove >= 1 && catchPoint == 0) { // 아직 움직일 수 있는 횟수가 남았고 잡은 말이 없다면 BEFORE SELECT PIECE STATE로 변경함
         flag = 1;
@@ -151,8 +151,25 @@ public class ProcessController {
         catchPoint--;
         flag = 0;
       }
-      //yutGui.boardRepaint();
+    } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
+
+      System.out.println("Second click touch other thing");
+      for(int i = 0; i < yutnoriSet.getMovable().size(); i++) {
+        System.out.println("Yut nori set in " + i + " with " + yutnoriSet.getMovable().get(i));
+      }
+
+      flag = 1;
+      yutnoriSet.getMovable().clear();
     }
+
+    for(int i = 0; i < yutnoriSet.getMovable().size(); i++) {
+      System.out.println("Yut nori set in " + i + " with " + yutnoriSet.getMovable().get(i));
+    }
+
+    System.out.println("Last Move  Flag : " + flag + " Turn :" + currentTurn);
+
+    yutnoriSet.getBoard().setAllUnChangeable();
+    yutGui.boardRepaint();
   }
 
   public boolean checkEndGame() {
