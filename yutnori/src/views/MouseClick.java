@@ -68,7 +68,7 @@ public class MouseClick{
     // when border layout's piece click
     for(int i=0; i<YutGui.beginPiece.length; i++) {
       if (e.getSource().equals(YutGui.beginPiece[i])) {
-        System.out.printf("Begin piece clicked %d\n\n", i);
+        //System.out.printf("Begin piece clicked %d\n\n", i);
         firstClickSetup(i, 0);
       }
     }
@@ -90,10 +90,10 @@ public class MouseClick{
       for(int j=1; j<8; j++) {
         if(e.getSource().equals(YutGui.btn[i][j])) {
           if (!isClicked) {
-            System.out.printf("First click %d , %d\n\n", i, j);
+            //System.out.printf("First click %d , %d\n\n", i, j);
             firstClickSetup(i, j);
           } else {
-            System.out.printf("Second click %d, %d \n\n", i, j);
+            //System.out.printf("Second click %d, %d \n\n", i, j);
             secondClickSetup(i, j);
           }
         }

@@ -29,6 +29,7 @@ public class ProcessController {
   public ProcessController(YutNoRiSet set, YutGui gui) {
     yutnoriSet = set;
     yutnoriSet.setPlayerTurn(0);
+    yutnoriSet.setInGameFlag(0);
     yutGui = gui;
     System.out.println("짜잔");
     System.out.println(yutnoriSet.getNumOfPiece() + "개의 피스");
@@ -38,15 +39,20 @@ public class ProcessController {
   /*FOR TEST*/
   public void rollYutTest(int res) {
     System.out.println("Roll Yut test!");
-    if (flag == 0) { //BEFORE YUT ROLL STATE 일 때만 윷 던지기가 동작 하도록.
-      currentTurn = yutnoriSet.getPlayerTurn();
+    if (yutnoriSet.getInGameFlag() == 0) { //BEFORE YUT ROLL STATE 일 때만 윷 던지기가 동작 하도록.
 
       yutnoriSet.getPlayer().getPlayerResult(currentTurn).add(res);
       numCanMove++;
       if (res != 4 && res != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
-        flag = 1;
+        yutnoriSet.setInGameFlag(1);
       }
       System.out.println(res + "가 나왔습니다");
+      if (res != 4 && res != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
+        System.out.println("움직일 말을 선택하세요!!!!!!!!!!!!!!!!!!!");
+        yutnoriSet.setInGameFlag(1);
+      } else{
+        System.out.println("한번 더 던질 수 있습니다!!!!!!!!!!!!!!!!!");
+      }
       System.out.print("나온 목록 : ");
       for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
         System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
@@ -59,7 +65,7 @@ public class ProcessController {
    *윷 또는 모가 나오기 전까지는 윷던지기 버튼을 계속 누를 수 있다.
    * */
   public void rollYutProcess() {
-    if (flag == 0) { //BEFORE YUT ROLL STATE 일 때만 윷 던지기가 동작 하도록.
+    if (yutnoriSet.getInGameFlag() == 0) { //BEFORE YUT ROLL STATE 일 때만 윷 던지기가 동작 하도록.
       currentTurn = yutnoriSet.getPlayerTurn();
       //System.out.println("Roll Yut Flag : " + flag + "Turn :" + currentTurn);
       int result;
@@ -67,7 +73,6 @@ public class ProcessController {
 
       numCanMove++;
 
-      System.out.println(result); //나온 결과를 순서대로 resultSet에 저장 해준다.
       yutnoriSet.getPlayer().getPlayerResult(currentTurn).add(result);
 
       System.out.println(result + "가 나왔습니다");
@@ -76,11 +81,10 @@ public class ProcessController {
       System.out.println("");
       if (result != 4 && result != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
         System.out.println("움직일 말을 선택하세요!!!!!!!!!!!!!!!!!!!");
-        flag = 1;
+        yutnoriSet.setInGameFlag(1);
       } else{
         System.out.println("한번 더 던질 수 있습니다!!!!!!!!!!!!!!!!!");
       }
-
       for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
         System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
       }
@@ -95,11 +99,11 @@ public class ProcessController {
      * 윷을 던진 후 이동할 말을 선택하고 말을 선택하면 그 말이 어디로 갈 수 있는지 보여준다.
      * */
   public void selectOutOfBoardPieceProcess(int turn){
-    if(flag == 1 && (turn == currentTurn)){
+    if(yutnoriSet.getInGameFlag() == 1 && (turn == currentTurn)){
       //System.out.println("Select Piece Flag : " + flag + " Turn :" + currentTurn + "selected Piece : " + turn);
       chosenPiece = yutnoriSet.getPlayer().getPieceIdFromOutOfBoard(currentTurn); // 눌려진 버튼으로 Piece id를 받아온다.
       yutnoriSet.showMovable(chosenPiece);
-      flag = 2;
+      yutnoriSet.setInGameFlag(2);
     } else if(flag == 1 && (turn != currentTurn)){
       System.out.println("본인의 말을 선택 해주세요!!!!!!!!!!!!!!!!!!!!!!!!");
     } else {
@@ -115,11 +119,11 @@ public class ProcessController {
       System.out.println("Not piece on circle");
       return;
     }
-    if (flag == 1 && currentTurn == ownerId) {
+    if (yutnoriSet.getInGameFlag() == 1 && currentTurn == ownerId) {
       //System.out.println("Select Piece Flag : " + flag + "Turn :" + currentTurn);
       chosenPiece = yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(0);
       yutnoriSet.showMovable(chosenPiece);
-      flag = 2;
+      yutnoriSet.setInGameFlag(2);
     } else if( flag == 1 &&
             currentTurn != (yutnoriSet.getPlayer().getPieceByPieceId(yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(0)).getOwnerId())){
       System.out.println("본인의 말을 선택 해주세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -130,9 +134,9 @@ public class ProcessController {
    * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
    * */
   public void movePieceProcess(int row, int col) {
-    System.out.println("Move  Flag : " + flag + " Turn :" + currentTurn);
+    System.out.println("Move  Flag : " + yutnoriSet.getInGameFlag() + " Turn :" + currentTurn);
     Integer resultValue;
-    if (flag == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
+    if (yutnoriSet.getInGameFlag() == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
         catchPoint++;
       }
@@ -170,16 +174,25 @@ public class ProcessController {
       System.out.println("NumCanMove : "+ numCanMove + " catchPoint : " + catchPoint);
       /*Decision*/
       if (numCanMove >= 1 && catchPoint == 0) { // 아직 움직일 수 있는 횟수가 남았고 잡은 말이 없다면 BEFORE SELECT PIECE STATE로 변경함
-        System.out.println(numCanMove + "번 윷을 더 던질 수 있습니다.!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        flag = 1;
+        System.out.println(numCanMove + "번 더 움직일 수 있습니다.!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        yutnoriSet.setInGameFlag(1);
+        yutnoriSet.setBoardUnchangeable();
+        return;
       } else if (numCanMove == 0 && catchPoint == 0) { // 움직일수 있는 횟수가 없고 잡은 말이 없다면 턴을 종료하고 다음 player에게 턴을 넘김.
-        System.out.println("Player " + (currentTurn+1)%yutnoriSet.getNumOfPlayer() +"에게 턴이 넘어갑니다!!!!!!!!!!!!!!!!!!!!!!");
         yutnoriSet.setPlayerTurn(((yutnoriSet.getPlayerTurn() + 1) % yutnoriSet.getNumOfPlayer()));
-        flag = 0;
+        yutnoriSet.setInGameFlag(0);
+        yutnoriSet.setBoardUnchangeable();
+        System.out.println("Player " + yutnoriSet.getPlayerTurn()+"에게 턴이 넘어갑니다!!!!!!! Flag : "+yutnoriSet.getInGameFlag());
+        System.out.println("");
+        System.out.println("Player" + yutnoriSet.getPlayerTurn() + " 윷을 던져주세요!");
+        currentTurn = yutnoriSet.getPlayerTurn();
+        return;
       } else if (catchPoint > 0) { // 상대 말을 잡았다면 BEFORE YUT ROLL STATE로 변경하여 다시 윷을 던질 수 있게 함.
-        System.out.println("말을 잡았습니다 한번 더 던지세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         catchPoint--;
-        flag = 0;
+        yutnoriSet.setInGameFlag(0);
+        yutnoriSet.setBoardUnchangeable();
+        System.out.println("말을 잡았습니다 한번 더 던지세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        return;
       }
     } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
 
@@ -188,7 +201,7 @@ public class ProcessController {
         //System.out.println("Yut nori set in " + i + " with " + yutnoriSet.getMovable().get(i));
       }
 
-      flag = 1;
+      yutnoriSet.setInGameFlag(1);
       yutnoriSet.getMovable().clear();
     }
 
