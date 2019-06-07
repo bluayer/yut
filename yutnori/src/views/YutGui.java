@@ -64,10 +64,10 @@ public class YutGui {
         if(yutnoriset.getBoard().getCircleByLocation(i,j).isOccupied()) {
           // numPiece is number of piece at board
           int numPiece = yutnoriset.getBoard().getCircleByLocation(i,j).getNumOfoccupyingPieces();
-          System.out.println(numPiece + " Piece at board at " + i + ", " + j);
+          //System.out.println(numPiece + " Piece at board at " + i + ", " + j);
           int pieceID = yutnoriset.getBoard().getCircleByLocation(i,j).getOccupyingPieces().get(0);
           int playerID = pieceID / 10;
-          System.out.println("Piece ID is " + pieceID + " and Player Id is " + playerID);
+          //System.out.println("Piece ID is " + pieceID + " and Player Id is " + playerID);
           BufferedImage[] pieceList = pieceSprite.pieceList;
           btn[i][j].setImage(pieceList[playerID]);
 //          JLabel number = new JLabel();
@@ -81,7 +81,7 @@ public class YutGui {
         }
 
         if (yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable()) {
-          System.out.println(i + ", " + j + " is " + yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable());
+          //System.out.println(i + ", " + j + " is " + yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable());
           btn[i][j].setBackground(Color.GREEN);
         } else {
           btn[i][j].setBackground(Color.DARK_GRAY);
