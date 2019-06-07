@@ -34,6 +34,7 @@ public class YutGui {
   static JButton yutBtn;
   private UIclick clickAction;
   private ImagePanel yutResultPanel;
+  private JLabel [] numberOutOfPiece;
 
   public YutGui(final models.YutNoRiSet yutSet) {
     midPanel = new BackGroundPanel();
@@ -89,6 +90,11 @@ public class YutGui {
         btn[i][j].repaint();
       }
     }
+    for(int i = 0;i <  numberOutOfPiece.length; i++) {
+      numberOutOfPiece[i].setText(Integer.toString(yutnoriset.getPlayer().getLeftNumOfPieceOfPlayer(i)));
+      numberOutOfPiece[i].repaint();
+    }
+
   }
 
   public class ModelChangeListener implements PropertyChangeListener {
@@ -205,12 +211,13 @@ public class YutGui {
     for(int i=0; i<6; i++) {
       yutButtonPanels.add(testYutBtn[i]);
     }
-
+    numberOutOfPiece = new JLabel[playerNumber];
     // set Player name and Piece at the side border
     for (int i=0; i< playerNumber; i++) {
       statusPanels.add(player[i]);
       statusPanels.add(beginPiece[i]);
-      statusPanels.add(new JLabel(Integer.toString(yutnoriset.getPlayer().getLeftNumOfPieceOfPlayer(i))));
+      numberOutOfPiece[i] = new JLabel(Integer.toString(yutnoriset.getPlayer().getLeftNumOfPieceOfPlayer(i)));
+      statusPanels.add(numberOutOfPiece[i]);
     }
 
     contentPane.add(yutButtonPanels,  BorderLayout.LINE_START);
