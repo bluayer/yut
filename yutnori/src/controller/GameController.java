@@ -15,6 +15,7 @@ public class GameController {
     public static int playerNumber;
     public static int pieceNumber;
     public static ProcessController processController;
+
     public static void main(String[] args) throws IOException {
         final models.YutNoRiSet yutSet = new YutNoRiSet();
         YutGui yutgui = new YutGui(yutSet);
@@ -27,13 +28,15 @@ public class GameController {
         yutgui.midPanel.enter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              if (Integer.parseInt(midP.playerNumberInput.getText()) >= 2 && Integer.parseInt(midP.playerNumberInput.getText()) <= 4
-                      && Integer.parseInt(midP.pieceNumberInput.getText()) >= 2 && Integer.parseInt(midP.pieceNumberInput.getText()) <= 5) {
+              System.out.println("Player number is " + midP.getPlayerNumber() +  " Piece Number is " + midP.getPieceNumber());
+              if (midP.getPlayerNumber() >= 2 && midP.getPlayerNumber() <= 4
+                        && midP.getPieceNumber() >= 2 && midP.getPieceNumber() <= 5) {
                 yutgui.initFrame.setVisible(false);
-
+                System.out.println("Player number is " + midP.getPlayerNumber() +  " Piece Number is " + midP.getPieceNumber());
+                System.out.println("Source is " + e.getSource().toString());
+                System.out.println("Enter is " + midP.enter);
                 if (e.getSource().equals(midP.enter)) {
-                  midP.setPlayerNumber(Integer.parseInt(midP.playerNumberInput.getText()));
-                  midP.setPieceNumber(Integer.parseInt(midP.pieceNumberInput.getText()));
+                  System.out.println("Player number is " + midP.getPlayerNumber() +  " Piece Number is " + midP.getPieceNumber());
                   yutSet.setPlayer(midP.getPlayerNumber(), midP.getPieceNumber());
                   yutgui.setupYutGUI(midP.getPlayerNumber(), midP.getPieceNumber());
                   yutSet.setPlayerTurn(0);

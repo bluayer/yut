@@ -8,34 +8,26 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 
 public class BackGroundPanel extends JPanel{
   private BufferedImage img;
-  private int playerNumber;
-  private int pieceNumber;
+  private int playerNumber = 2;
+  private int pieceNumber = 2;
 
-  public JButton enter;
+  public JButton enter = new JButton();
 
-  public JTextField playerNumberInput;
-  public JTextField pieceNumberInput;
+  public JComboBox playerNumberInput;
+  public JComboBox pieceNumberInput;
 
   public BackGroundPanel() {
 
@@ -69,7 +61,7 @@ public class BackGroundPanel extends JPanel{
     enterBtnPanel.setLayout(new BorderLayout());
     enterBtnPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-    enter= new JButton("enter");
+    enter.setText("enter");
 
     Color pink = new Color(255,160,154);
     Color red = new Color(165, 8, 33);
@@ -81,8 +73,32 @@ public class BackGroundPanel extends JPanel{
     enter.setOpaque(true);
     enterBtnPanel.add(enter);
 
-    playerNumberInput = new JTextField("Type # player!");
-    pieceNumberInput = new JTextField("Type # number!");
+    JLabel playerInput = new JLabel("Input player number");
+    JLabel pieceInput = new JLabel("Input piece number");
+    buttonPanel.add(playerInput);
+    buttonPanel.add(pieceInput);
+
+    String s1[] = { "2", "3", "4" };
+    String s2[] = { "2", "3", "4", "5" };
+
+    // create checkbox
+    playerNumberInput = new JComboBox(s1);
+    pieceNumberInput = new JComboBox(s2);
+    // add ItemListener
+    playerNumberInput.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent e) {
+        if (e.getSource() == playerNumberInput) {
+          playerNumber = Integer.parseInt((playerNumberInput.getSelectedItem()).toString());
+          System.out.println((playerNumberInput.getSelectedItem()).toString());
+        }
+        if (e.getSource() == pieceNumberInput) {
+          pieceNumber = Integer.parseInt((pieceNumberInput.getSelectedItem()).toString());
+          System.out.println((pieceNumberInput.getSelectedItem()).toString());
+        }
+      }
+    });
+
     buttonPanel.add(playerNumberInput, BorderLayout.SOUTH);
     buttonPanel.add(pieceNumberInput, BorderLayout.SOUTH);
 
@@ -98,12 +114,6 @@ public class BackGroundPanel extends JPanel{
 //      }
 //    });
 
-    //INPUT TEXT AREA
-    playerNumberInput.setBackground(Color.BLUE);
-    pieceNumberInput.setBackground(Color.BLUE);
-
-    playerNumberInput.setForeground(Color.WHITE);
-    pieceNumberInput.setForeground(Color.WHITE);
 
     buttonPanel.add(initialString);
     buttonPanel.add(enterBtnPanel, BorderLayout.NORTH);

@@ -26,6 +26,7 @@ public class YutGui {
   public BackGroundPanel midPanel;
   public JFrame mainFrame;
   public JFrame initFrame;
+  public JFrame exitFrame;
   public static ImagePanel[][] btn;
   static JButton[] testYutBtn;
   public JPanel yutBoard;
@@ -43,7 +44,6 @@ public class YutGui {
   public JPanel dialogPanel;
   static public JButton [] resButton;
   static int resButtonLength;
-  public int willRemove;
   static public JDialog d;
 
   public YutGui(final models.YutNoRiSet yutSet) {
@@ -51,6 +51,7 @@ public class YutGui {
     yutnoriset = yutSet;
     mainFrame = new JFrame("Mode Selection");
     initFrame = new JFrame("Game View");
+    exitFrame = new JFrame("Exit View");
     yutBoard= new JPanel();
     btn = new ImagePanel[8][8];
     clickAction = new UIclick(yutSet);
@@ -67,6 +68,42 @@ public class YutGui {
   }
 
   public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
+
+  public void setupExitGUI() {
+    exitFrame.setSize(FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
+    exitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    exitFrame.setLayout(new BorderLayout(10, 10));
+    exitFrame.setLocationRelativeTo(null);
+
+    JPanel exitP = new JPanel();
+    exitP.setLayout(new GridLayout(0, 2));
+    JButton restart = new JButton();
+    restart.setText("Restart");
+    JButton exit = new JButton();
+    exit.setText("Exit");
+    restart.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        exitFrame.dispose();
+        setupStartUI();
+      }
+    });
+
+    exit.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        exitFrame.dispose();
+      }
+    });
+
+
+    exitP.add(restart);
+    exitP.add(exit);
+    exitFrame.add(exitP, BorderLayout.CENTER);
+
+    mainFrame.setVisible(false);
+    exitFrame.setVisible(true);
+  }
 
   private String getYutType(int yut) {
     String res = "";

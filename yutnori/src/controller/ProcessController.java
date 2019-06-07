@@ -120,6 +120,8 @@ public class ProcessController {
       System.out.println("Not piece on circle");
       return;
     }
+
+
     if (yutnoriSet.getInGameFlag() == 1 && currentTurn == ownerId) {
       //System.out.println("Select Piece Flag : " + flag + "Turn :" + currentTurn);
       chosenPiece = yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(0);
@@ -216,6 +218,7 @@ public class ProcessController {
       if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
         System.out.println("게임이 끝났습니다!!!!! 승자 : Player" + currentTurn);
         //종료시켜야함
+        yutGui.setupExitGUI();
       }
 
     } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
