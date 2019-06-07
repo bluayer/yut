@@ -1,6 +1,7 @@
 package controller;
 //import views.MouseClick;
 
+import com.sun.security.auth.NTUserPrincipal;
 import models.Circle;
 import models.Piece;
 import views.YutGui;
@@ -146,9 +147,22 @@ public class ProcessController {
     }
   }
 
-  /*CHOICE PIECE STATE FLAG = 2
+  public void multiPossibleEnd(int result) {
+    try {
+      System.out.println("result called " + result);
+      yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer) result);
+
+      decisionMaking();
+    } catch (NullPointerException e){
+      System.out.println("multi possible End");
+    }
+  }
+
+
+
+  /** CHOICE PIECE STATE FLAG = 2
    * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
-   * */
+   */
   public void movePieceProcess(int row, int col) {
     System.out.println("Move  Flag : " + yutnoriSet.getInGameFlag() + " Turn :" + currentTurn);
     Integer resultValue;
@@ -173,8 +187,9 @@ public class ProcessController {
           yutnoriSet.getPlayer().getPieceByLocation(7, 7).setGone();
         }
         // call view function with currentTurn
-        yutGui.popUp(currentTurn);
-
+        if(yutnoriSet.getPlayer().getPlayerResult(currentTurn).size()> 1) {
+          yutGui.popUp(currentTurn, chosenPiece);
+        }
       } else {
         removeSuceed = yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
         System.out.println(resultValue);
@@ -185,7 +200,10 @@ public class ProcessController {
             yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer)1);
           }
         }
+
+        decisionMaking();
       }
+      yutnoriSet.getBoard().getCircleByLocation(7,7).resetCircle();
 
 
 
@@ -200,8 +218,6 @@ public class ProcessController {
       if (yutnoriSet.getPlayer().getWinnerPlayerId() != -1) {
         //종료시켜야함
       }
-      /*Decision*/
-      decisionMaking();
 
     } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
 

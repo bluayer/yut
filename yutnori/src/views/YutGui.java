@@ -37,9 +37,11 @@ public class YutGui {
   private UIclick clickAction;
   private ImagePanel yutResultPanel;
   public JPanel dialogPanel;
-  public JButton [] resButton;
+  static public JButton [] resButton;
+  static int resButtonLength;
   public int willRemove;
-  public JDialog d;
+  static public JDialog d;
+
 
 
   public YutGui(final models.YutNoRiSet yutSet) {
@@ -56,6 +58,7 @@ public class YutGui {
     yutResultPanel = new ImagePanel();
     testYutBtn = makeTestYutBtn();
     dialogPanel = new JPanel();
+    resButtonLength = 0;
   }
 
   public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
@@ -85,17 +88,21 @@ public class YutGui {
     return res;
   }
 
-  public void popUp(int curPlayerID) {
+  public void popUp(int curPlayerID, int pieceId) {
 
     System.out.println("Popup work");
     ArrayList<Integer> res = yutnoriset.getPlayer().getPlayerResult(curPlayerID);
+    int lowerBound = yutnoriset.getClickedResult(pieceId, 7, 7);
     d = new JDialog(mainFrame, "Select yut res");
     JLabel l = new JLabel("Select yut res");
 
     resButton = new JButton[res.size()];
     for(int i = 0; i<res.size(); i++) {
-      resButton[i] = new JButton(Integer.toString(res.get(i)));
-      resButton[i].setText(getYutType(res.get(i)));
+      int temp = res.get(i);
+      if(lowerBound < temp) {
+        resButton[i] = new JButton(Integer.toString(res.get(i)));
+        resButton[i].setText(getYutType(res.get(i)));
+        resButton[i].addMouseListener(clickAction);
 //      resButton[i].addActionListener(new ActionListener() {
 //        @Override
 //        public void actionPerformed(ActionEvent e) {
@@ -108,7 +115,8 @@ public class YutGui {
 //          }
 //        }
 //        });
-      dialogPanel.add(resButton[i]);
+        dialogPanel.add(resButton[i]);
+      }
     }
     d.add(l);
     d.add(dialogPanel);
@@ -117,6 +125,8 @@ public class YutGui {
     d.setVisible(true);
     d.repaint();
     mainFrame.repaint();
+
+    resButtonLength = resButton.length;
   }
 
   public void boardRepaint() {
