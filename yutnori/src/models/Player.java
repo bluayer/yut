@@ -58,10 +58,11 @@ public class Player {
     try{
       int numOfLeftPieces = 0;
       for(Piece i : getPlayerPieces(playerId)){
-        if(!i.isGone()){
+        if(!i.isGone() && i.isOutOfBoard()){
           numOfLeftPieces++;
         }
       }
+      System.out.println("left piece" + numOfLeftPieces);
       return numOfLeftPieces;
     } catch (NullPointerException e){
       /* error handle */
@@ -96,14 +97,12 @@ public class Player {
     return numOfPieceLocateInOutOfBoard;
   }
 
-  public int getPieceFromOutOfBoard(int playerId){
-    int pieceIdOfPlayer = 0;
+  public int getPieceIdFromOutOfBoard(int playerId){
     for(Piece i : getPlayerPieces(playerId)){
       if(i.isOutOfBoard()){
         if(!i.isGone())
-          return pieceIdOfPlayer;
+          return i.getId();
       }
-      pieceIdOfPlayer++;
     }
     return -1;
   }

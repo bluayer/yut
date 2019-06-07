@@ -5,6 +5,7 @@
 
 package models;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.beans.PropertyChangeListener;
@@ -19,8 +20,10 @@ public class YutNoRiSet {
 
   int numOfPlayer;
   int numOfPiece;
+  ArrayList<Integer> movable;
 
   private int playerTurn;
+  private int inGameFlag;
   private PropertyChangeSupport observable;
 
   // Set board, ruleTable and yutSet, the setPlayer must be called to start the game.
@@ -29,6 +32,7 @@ public class YutNoRiSet {
     yutSet = new YutSet();
     ruleTable = new RuleTable();
     observable = new PropertyChangeSupport(this);
+    movable = new ArrayList<Integer>();
   }
 
   // Set board, yutSet, player and ruleTable with the parameters.
@@ -78,6 +82,7 @@ public class YutNoRiSet {
 
   public void setPlayerTurn(int turn){
     this.playerTurn = turn;
+    observable.firePropertyChange("player change", false, true);
   }
 
   public RuleTable getRuleTable() {
@@ -165,27 +170,37 @@ public class YutNoRiSet {
     // Get player Piece and get the circle id of that location to use rule table.
     Piece targetPiece = player.getPieceByPieceId(pieceId);
     Circle currentCircle;
+    System.out.println("Piece is"  + pieceId);
     if(targetPiece.isOutOfBoard()) {
       currentCircle = board.getCircleByLocation(7, 7);
     } else {
       currentCircle = board.getCircleByLocation(targetPiece.getRow(), targetPiece.getColumn());
     }
     // Change circle state changeable.
-    System.out.println("showMovablecalled!");
+    System.out.println("showMovablecalled! current Circle is " + currentCircle.getId());
     for(int i : player.getPlayerResult(targetPiece.getOwnerId())){
       int[] nextMovableCircleIds = ruleTable.getNextMoveCircleIds(currentCircle.getId(), i);
 
       board.getCircleByCircleId(nextMovableCircleIds[0]).setChangeable();
+      board.getCircleByCircleId(nextMovableCircleIds[0]).getId();
+      movable.add(nextMovableCircleIds[0]);
       // If this is two way circle
       if(nextMovableCircleIds[1] != -1){
         board.getCircleByCircleId(nextMovableCircleIds[1]).setChangeable();
+        movable.add(nextMovableCircleIds[1]);
       }
     }
 
     observable.firePropertyChange("movable",false, true);
   }
 
+  public ArrayList<Integer> getMovable() { return movable; }
+
+
   public void move(int pieceId, int row, int column){
+    for(int i = 0; i < player.getPlayerResult(playerTurn).size(); i++){
+      System.out.println(playerTurn + " " + player.getPlayerResult(playerTurn).get(i));
+    }
     Piece targetPiece = player.getPieceByPieceId(pieceId);
     Circle lastCircle;
     if(targetPiece.isOutOfBoard()) {
@@ -204,7 +219,17 @@ public class YutNoRiSet {
     targetPiece.setOutOfBoard(false);
     nextCircle.setOccupied();
     lastCircle.resetCircle();
-    observable.firePropertyChange("move", true, false);
+    // board.setAllUnChangeable();
+    // observable.firePropertyChange("move", true, false);
+  }
+
+  public int getInGameFlag(){
+    return inGameFlag;
+  }
+
+  public void setInGameFlag(){
+    inGameFlag = (inGameFlag+1)%3;
+    observable.firePropertyChange("turn change", false, true);
   }
 
   public void setBoardUnchangeable(){

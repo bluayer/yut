@@ -53,45 +53,40 @@ public class YutGui {
   public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
 
   public void boardRepaint() {
-    System.out.println("Board Repaint");
+    //System.out.println("Board Repaint");
     for(int i = 1; i < 8; i++) {
       for (int j = 1; j < 8; j++) {
 
         if(yutnoriset.getBoard().getCircleByLocation(i,j) == null){
           continue;
         }
-
+        // If piece on (i, j) board
         if(yutnoriset.getBoard().getCircleByLocation(i,j).isOccupied()) {
+          // numPiece is number of piece at board
           int numPiece = yutnoriset.getBoard().getCircleByLocation(i,j).getNumOfoccupyingPieces();
-          for (int k = 0; k < numPiece; k++) {
-            int pieceID = yutnoriset.getBoard().getCircleByLocation(i,j).getOccupyingPieces().get(0);
-            int playerID = pieceID / 10;
-            BufferedImage[] pieceList = pieceSprite.pieceList;
-            btn[i][j].setImage(pieceList[playerID]);
-            btn[i][j].repaint();
-            System.out.println("Drawing piece for " + playerID);
-          }
+          System.out.println(numPiece + " Piece at board at " + i + ", " + j);
+          int pieceID = yutnoriset.getBoard().getCircleByLocation(i,j).getOccupyingPieces().get(0);
+          int playerID = pieceID / 10;
+          System.out.println("Piece ID is " + pieceID + " and Player Id is " + playerID);
+          BufferedImage[] pieceList = pieceSprite.pieceList;
+          btn[i][j].setImage(pieceList[playerID]);
+//          JLabel number = new JLabel();
+//          number.setIcon(new ImageIcon(pieceList[playerID]));
+//          number.setText(Integer.toString(numPiece));
+//          number.setHorizontalTextPosition(JLabel.CENTER);
+//          number.setVerticalTextPosition(JLabel.CENTER);
+//          btn[i][j].add(number);
+        } else {
+          btn[i][j].setImage(null);
         }
 
         if (yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable()) {
+          System.out.println(i + ", " + j + " is " + yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable());
           btn[i][j].setBackground(Color.GREEN);
-          btn[i][j].repaint();
-        }
-      }
-    }
-  }
-
-  public void grayRepaint() {
-    for(int i = 1; i < 8; i++) {
-      for (int j = 1; j < 8; j++) {
-        if(yutnoriset.getBoard().getCircleByLocation(i,j) == null){
-          continue;
-        }
-
-        if (yutnoriset.getBoard().getCircleByLocation(i, j).isChangeable()) {
+        } else {
           btn[i][j].setBackground(Color.DARK_GRAY);
-          btn[i][j].repaint();
         }
+        btn[i][j].repaint();
       }
     }
   }
