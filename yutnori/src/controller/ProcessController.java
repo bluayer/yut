@@ -1,6 +1,7 @@
 package controller;
 //import views.MouseClick;
 
+import com.sun.security.auth.NTUserPrincipal;
 import models.Circle;
 import models.Piece;
 import views.YutGui;
@@ -130,9 +131,38 @@ public class ProcessController {
     }
   }
 
-  /*CHOICE PIECE STATE FLAG = 2
+  public void decisionMaking() {
+    if (numCanMove >= 1 && catchPoint == 0) { // 아직 움직일 수 있는 횟수가 남았고 잡은 말이 없다면 BEFORE SELECT PIECE STATE로 변경함
+      yutnoriSet.setInGameFlag(1);
+      yutnoriSet.setBoardUnchangeable();
+    } else if (numCanMove == 0 && catchPoint == 0) { // 움직일수 있는 횟수가 없고 잡은 말이 없다면 턴을 종료하고 다음 player에게 턴을 넘김.
+      yutnoriSet.setPlayerTurn(((yutnoriSet.getPlayerTurn() + 1) % yutnoriSet.getNumOfPlayer()));
+      yutnoriSet.setInGameFlag(0);
+      yutnoriSet.setBoardUnchangeable();
+      currentTurn = yutnoriSet.getPlayerTurn();
+    } else if (catchPoint > 0) { // 상대 말을 잡았다면 BEFORE YUT ROLL STATE로 변경하여 다시 윷을 던질 수 있게 함.
+      catchPoint--;
+      yutnoriSet.setInGameFlag(0);
+      yutnoriSet.setBoardUnchangeable();
+    }
+  }
+
+  public void multiPossibleEnd(int result) {
+    try {
+      System.out.println("result called " + result);
+      yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer) result);
+
+      decisionMaking();
+    } catch (NullPointerException e){
+      System.out.println("multi possible End");
+    }
+  }
+
+
+
+  /** CHOICE PIECE STATE FLAG = 2
    * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
-   * */
+   */
   public void movePieceProcess(int row, int col) {
     System.out.println("Move  Flag : " + yutnoriSet.getInGameFlag() + " Turn :" + currentTurn);
     Integer resultValue;
@@ -156,21 +186,24 @@ public class ProcessController {
         for(int i : yutnoriSet.getBoard().getCircleByLocation(7,7).getOccupyingPieces()){
           yutnoriSet.getPlayer().getPieceByPieceId(i).setGone();
         }
-        System.out.println(yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().size() + "개의 말이 도착했습니다");
-        yutnoriSet.getBoard().getCircleByLocation(row, col).resetCircle();
-      }
-
-
-
-      removeSuceed = yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
-      //System.out.println(resultValue);
-      if(removeSuceed == false){
-        // When first input as Do, then result value is same as Back Do.
-        // So the result value is 0.
-        if( resultValue == 0){
-          yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer)1);
+        // call view function with currentTurn
+        if(yutnoriSet.getPlayer().getPlayerResult(currentTurn).size()> 1) {
+          yutGui.popUp(currentTurn, chosenPiece);
         }
+      } else {
+        removeSuceed = yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
+        System.out.println(resultValue);
+        if(removeSuceed == false){
+          // When first input as Do, then result value is same as Back Do.
+          // So the result value is 0.
+          if( resultValue == 0){
+            yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer)1);
+          }
+        }
+
+        decisionMaking();
       }
+      yutnoriSet.getBoard().getCircleByLocation(7,7).resetCircle();
 
       // debug
       System.out.println("남은 목록 : ");
@@ -184,28 +217,7 @@ public class ProcessController {
         System.out.println("게임이 끝났습니다!!!!! 승자 : Player" + currentTurn);
         //종료시켜야함
       }
-      /*Decision*/
-      if (numCanMove >= 1 && catchPoint == 0) { // 아직 움직일 수 있는 횟수가 남았고 잡은 말이 없다면 BEFORE SELECT PIECE STATE로 변경함
-        System.out.println(numCanMove + "번 더 움직일 수 있습니다.!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        yutnoriSet.setInGameFlag(1);
-        yutnoriSet.setBoardUnchangeable();
-        return;
-      } else if (numCanMove == 0 && catchPoint == 0) { // 움직일수 있는 횟수가 없고 잡은 말이 없다면 턴을 종료하고 다음 player에게 턴을 넘김.
-        yutnoriSet.setPlayerTurn(((yutnoriSet.getPlayerTurn() + 1) % yutnoriSet.getNumOfPlayer()));
-        yutnoriSet.setInGameFlag(0);
-        yutnoriSet.setBoardUnchangeable();
-        System.out.println("Player " + yutnoriSet.getPlayerTurn()+"에게 턴이 넘어갑니다!!!!!!! Flag : "+yutnoriSet.getInGameFlag());
-        System.out.println("");
-        System.out.println("Player" + yutnoriSet.getPlayerTurn() + " 윷을 던져주세요!");
-        currentTurn = yutnoriSet.getPlayerTurn();
-        return;
-      } else if (catchPoint > 0) { // 상대 말을 잡았다면 BEFORE YUT ROLL STATE로 변경하여 다시 윷을 던질 수 있게 함.
-        catchPoint--;
-        yutnoriSet.setInGameFlag(0);
-        yutnoriSet.setBoardUnchangeable();
-        System.out.println("말을 잡았습니다 한번 더 던지세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        return;
-      }
+
     } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
 
       System.out.println("Second click touch other thing");
