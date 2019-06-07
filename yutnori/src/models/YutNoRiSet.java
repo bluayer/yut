@@ -23,6 +23,7 @@ public class YutNoRiSet {
   ArrayList<Integer> movable;
 
   private int playerTurn;
+  private int inGameFlag;
   private PropertyChangeSupport observable;
 
   // Set board, ruleTable and yutSet, the setPlayer must be called to start the game.
@@ -216,5 +217,13 @@ public class YutNoRiSet {
     lastCircle.resetCircle();
     // board.setAllUnChangeable();
     // observable.firePropertyChange("move", true, false);
+  }
+
+  public int getInGameFlag(){
+    return inGameFlag;
+  }
+
+  public void setInGameFlag(){
+    inGameFlag = (inGameFlag+1)%3;
   }
 }
