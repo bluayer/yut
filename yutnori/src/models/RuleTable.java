@@ -13,10 +13,15 @@ public class RuleTable {
 
     for(int i = 0; i < 15; i++){
       for(int j = 0; j < 6; j++){
+        if(i == 0 && j == 0){
+          nextMoveTable[0][0][0] = 1;
+          continue;
+        }
         if(j == 0){
           nextMoveTable[i][j][0] = i - 1;
+        }else {
+          nextMoveTable[i][j][0] = i + j;
         }
-        nextMoveTable[i][j][0] = i + j;
       }
     }
     nextMoveTable[5][1][1] = 25;
