@@ -116,7 +116,6 @@ public class ProcessController {
   public void movePieceProcess(int row, int col) {
     System.out.println("Move  Flag : " + flag + " Turn :" + currentTurn);
     if (flag == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
-      int[] moveLocation;
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
         catchPoint++;
       }
@@ -129,6 +128,7 @@ public class ProcessController {
       System.out.println("");
       yutnoriSet.move(chosenPiece, row, col);
       numCanMove--;
+      yutnoriSet.getMovable().clear();
 
       if (row == 1 && col == 1) {
         for (int i = 0; i < yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().size(); i++) {
@@ -152,12 +152,6 @@ public class ProcessController {
         flag = 0;
       }
     } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
-
-      System.out.println("Second click touch other thing");
-      for(int i = 0; i < yutnoriSet.getMovable().size(); i++) {
-        System.out.println("Yut nori set in " + i + " with " + yutnoriSet.getMovable().get(i));
-      }
-
       flag = 1;
       yutnoriSet.getMovable().clear();
     }
