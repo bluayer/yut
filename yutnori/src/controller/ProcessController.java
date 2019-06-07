@@ -188,6 +188,7 @@ public class ProcessController {
 
       numCanMove--;
       resultValue = yutnoriSet.getClickedResult(chosenPiece, row, col);
+      yutnoriSet.move(chosenPiece, row, col);
 
       // When the piece(s) reach to the end point.
       if (row == 7 && col == 7) {
@@ -196,6 +197,7 @@ public class ProcessController {
           yutnoriSet.getPlayer().getPieceByPieceId(i).setGone();
         }
 
+        System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId());
         if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
           System.out.println("게임이 끝났습니다!!!!! 승자 : Player" + currentTurn);
           //종료시켜야함
@@ -231,7 +233,6 @@ public class ProcessController {
 
         decisionMaking();
       }
-      yutnoriSet.move(chosenPiece, row, col);
       yutnoriSet.getMovable().clear();
       yutnoriSet.getBoard().getCircleByLocation(7,7).resetCircle();
 
