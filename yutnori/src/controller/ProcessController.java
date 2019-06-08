@@ -209,7 +209,9 @@ public class ProcessController {
 
         // call view function with currentTurn
         for(int i : yutnoriSet.getPlayer().getPlayerResult(currentTurn)){
-          if(i >= resultValue){
+          if(resultValue == 0){
+            break;
+          } else if(i >= resultValue){
             numOfReachable++;
           }
         }
