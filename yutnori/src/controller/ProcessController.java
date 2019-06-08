@@ -199,7 +199,14 @@ public class ProcessController {
         for(int i : yutnoriSet.getBoard().getCircleByLocation(7,7).getOccupyingPieces()){
           yutnoriSet.getPlayer().getPieceByPieceId(i).setGone();
         }
-        
+        System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId() + "가 승리!");
+        System.out.println("CurrentTurn is " + currentTurn);
+        if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
+          System.out.println("게임이 끝났습니다!!!!! 승자 : Player" + currentTurn);
+          //종료시켜야함
+          yutGui.setupExitGUI();
+        }
+
         // call view function with currentTurn
         for(int i : yutnoriSet.getPlayer().getPlayerResult(currentTurn)){
           if(i >= resultValue){
@@ -233,12 +240,7 @@ public class ProcessController {
       
       yutnoriSet.getBoard().getCircleByLocation(7,7).resetCircle();
 
-      System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId() + "가 승리!");
-      if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
-        System.out.println("게임이 끝났습니다!!!!! 승자 : Player" + currentTurn);
-        //종료시켜야함
-        yutGui.setupExitGUI();
-      }
+
     } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
 
       //System.out.println("Second click touch other thing");
