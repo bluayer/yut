@@ -206,6 +206,7 @@ public class ProcessController {
           //종료시켜야함
           yutGui.setupExitGUI();
           gameOver = true;
+          yutnoriSet.resetBoard();
         }
 
         // call view function with currentTurn
