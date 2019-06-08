@@ -297,7 +297,8 @@ public class YutGui {
     yutBoard.setLayout(new GridLayout(7, 7));
     yutBoard.setBackground(Color.WHITE);
     yutBoard.setBorder(new EmptyBorder(30, 30, 30, 30));
-
+    yutBoard.removeAll();
+    yutBoard.repaint();
     for(int i = 1; i < 8; i++) {
       for(int j = 1; j < 8; j++) {
         btn[i][j] = new ImagePanel();
