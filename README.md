@@ -1,4 +1,4 @@
-#YutNoRi_Game
+# YutNoRi_Game
 ## made by team 7 at software engineering class
 ***
 ### Writer
