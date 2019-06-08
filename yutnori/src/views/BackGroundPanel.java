@@ -92,12 +92,19 @@ public class BackGroundPanel extends JPanel{
           playerNumber = Integer.parseInt((playerNumberInput.getSelectedItem()).toString());
           System.out.println((playerNumberInput.getSelectedItem()).toString());
         }
+      }
+    });
+    pieceNumberInput.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent e) {
         if (e.getSource() == pieceNumberInput) {
           pieceNumber = Integer.parseInt((pieceNumberInput.getSelectedItem()).toString());
           System.out.println((pieceNumberInput.getSelectedItem()).toString());
         }
       }
     });
+
+
 
     buttonPanel.add(playerNumberInput, BorderLayout.SOUTH);
     buttonPanel.add(pieceNumberInput, BorderLayout.SOUTH);

@@ -44,7 +44,7 @@ public class ProcessController {
     System.out.println("Roll Yut test!");
     if (yutnoriSet.getInGameFlag() == 0) { //BEFORE YUT ROLL STATE 일 때만 윷 던지기가 동작 하도록.
 
-      yutnoriSet.getPlayer().getPlayerResult(currentTurn).add(res);
+      yutnoriSet.addPlayerResult(currentTurn, res);
       numCanMove++;
       if (res != 4 && res != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
         yutnoriSet.setInGameFlag(1);
@@ -76,7 +76,7 @@ public class ProcessController {
 
       numCanMove++;
 
-      yutnoriSet.getPlayer().getPlayerResult(currentTurn).add(result);
+      yutnoriSet.addPlayerResult(currentTurn, result);
 
       System.out.println(result + "가 나왔습니다");
       System.out.print("나온 목록 : ");
@@ -164,7 +164,7 @@ public class ProcessController {
   public void multiPossibleEnd(int result) {
     try {
       System.out.println("result called " + result);
-      yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer) result);
+      yutnoriSet.deletePlayerResult(currentTurn, result);
       decisionMaking();
     } catch (NullPointerException e){
       System.out.println("multi possible End");
@@ -199,6 +199,7 @@ public class ProcessController {
         for(int i : yutnoriSet.getBoard().getCircleByLocation(7,7).getOccupyingPieces()){
           yutnoriSet.getPlayer().getPieceByPieceId(i).setGone();
         }
+        System.out.println("result is " + resultValue);
         System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId() + "가 승리!");
         System.out.println("CurrentTurn is " + currentTurn);
         if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
@@ -219,13 +220,13 @@ public class ProcessController {
         }
         if(numOfReachable > 1 && !gameOver) {
           System.out.println("popup called");
-          yutGui.popUp(currentTurn, chosenPiece);
+          yutGui.popUp(currentTurn, resultValue);
         }else{
-          yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
+          yutnoriSet.deletePlayerResult(currentTurn, resultValue);
           decisionMaking();
         }
       } else {
-        removeSuceed = yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
+        removeSuceed = yutnoriSet.deletePlayerResult(currentTurn, resultValue);
 
         if(removeSuceed == false){
           // When first input as Do, then result value is same as Back Do.

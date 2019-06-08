@@ -248,4 +248,20 @@ public class YutNoRiSet {
       board.getCircleByCircleId(i).resetCircle();
     }
   }
+
+  public boolean addPlayerResult(int playerId, int result){
+    if(player.getPlayerResult(playerId).add((Integer)result)){
+      observable.firePropertyChange("add result", true, false);
+      return true;
+    }
+    return false;
+  }
+
+  public boolean deletePlayerResult(int playerId, int target){
+    if(player.getPlayerResult(playerId).remove((Integer)target)){
+      observable.firePropertyChange("delete result", true, false);
+      return true;
+    }
+    return false;
+  }
 }
