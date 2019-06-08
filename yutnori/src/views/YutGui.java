@@ -45,6 +45,8 @@ public class YutGui {
   static public JButton [] resButton;
   static int resButtonLength;
   static public JDialog d;
+  JPanel statusPanels;
+  JPanel yutButtonPanels;
 
   public YutGui(final models.YutNoRiSet yutSet) {
     midPanel = new BackGroundPanel();
@@ -65,6 +67,8 @@ public class YutGui {
     groupingNum = new JLabel[8][8];
     dialogPanel = new JPanel();
     resButtonLength = 0;
+    statusPanels = new JPanel();
+    yutButtonPanels = new JPanel();
   }
 
   public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
@@ -220,7 +224,7 @@ public class YutGui {
     } else if (yutnoriset.getInGameFlag() == 2) {
       playerStatus.setText("Player status : Move piece");
     }
-    turnStatus.setText("Turn status : Player " +yutnoriset.getPlayerTurn() + " turn");
+    turnStatus.setText("Turn status : Player " + (yutnoriset.getPlayerTurn() +1 ) + "  turn");
 
     playerStatus.repaint();
     turnStatus.repaint();
@@ -324,13 +328,13 @@ public class YutGui {
       }
     }
 
-    JPanel statusPanels = new JPanel();
+    statusPanels.removeAll();
     // Fix outlook which is not compatible with name+image+number of piece.
     statusPanels.setLayout(new GridLayout(2, 0));
     statusPanels.setBorder(new EmptyBorder(0, 30, 0, 30));
 
+    yutButtonPanels.removeAll();
     /* Left side border */
-    JPanel yutButtonPanels = new JPanel();
     yutButtonPanels.setLayout(new GridLayout(0, 1));
     yutButtonPanels.setBorder(new EmptyBorder(0, 30, 0, 30));
 
