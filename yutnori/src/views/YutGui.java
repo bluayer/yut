@@ -80,7 +80,17 @@ public class YutGui {
     exitFrame.setLocationRelativeTo(null);
 
     JPanel exitP = new JPanel();
-    exitP.setLayout(new GridLayout(0, 2));
+    exitP.setLayout(new GridLayout(2, 0));
+    JPanel selection = new JPanel();
+    selection.setLayout(new GridLayout(0,2));
+
+    JLabel winner = new JLabel();
+    String winnerText = "Winner is : Player" + (yutnoriset.getPlayer().getWinnerPlayerId() + 1);
+    winner.setText(winnerText);
+    winner.setFont(new Font("돋움",Font.PLAIN, 30));
+    winner.setHorizontalAlignment(JLabel.CENTER);
+    exitP.add(winner);
+
     JButton restart = new JButton();
     restart.setText("Restart");
     JButton exit = new JButton();
@@ -96,13 +106,14 @@ public class YutGui {
     exit.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        exitFrame.dispose();
+        System.exit(0);
       }
     });
 
 
-    exitP.add(restart);
-    exitP.add(exit);
+    selection.add(restart);
+    selection.add(exit);
+    exitP.add(selection);
     exitFrame.add(exitP, BorderLayout.CENTER);
 
     mainFrame.setVisible(false);
