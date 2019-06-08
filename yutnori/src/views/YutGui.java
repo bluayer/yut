@@ -137,18 +137,21 @@ public class YutGui {
   public void popUp(int curPlayerID, int pieceId) {
 
     System.out.println("Popup work");
-    ArrayList<Integer> res = yutnoriset.getPlayer().getPlayerResult(curPlayerID);
     int lowerBound = yutnoriset.getClickedResult(pieceId, 7, 7);
+    ArrayList<Integer> res = new ArrayList<>();
+    for(int i : yutnoriset.getPlayer().getPlayerResult(curPlayerID)){
+      if(lowerBound <= i){
+        res.add(i);
+      }
+    }
     d = new JDialog(mainFrame, "Select yut res");
     JLabel l = new JLabel("Select yut res");
 
     resButton = new JButton[res.size()];
     for(int i = 0; i<res.size(); i++) {
-      int temp = res.get(i);
-      if(lowerBound < temp) {
-        resButton[i] = new JButton(Integer.toString(res.get(i)));
-        resButton[i].setText(getYutType(res.get(i)));
-        resButton[i].addMouseListener(clickAction);
+      resButton[i] = new JButton(Integer.toString(res.get(i)));
+      resButton[i].setText(getYutType(res.get(i)));
+      resButton[i].addMouseListener(clickAction);
 //      resButton[i].addActionListener(new ActionListener() {
 //        @Override
 //        public void actionPerformed(ActionEvent e) {
@@ -161,8 +164,7 @@ public class YutGui {
 //          }
 //        }
 //        });
-        dialogPanel.add(resButton[i]);
-      }
+      dialogPanel.add(resButton[i]);
     }
     d.add(l);
     d.add(dialogPanel);

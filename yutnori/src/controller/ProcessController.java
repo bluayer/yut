@@ -15,6 +15,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class ProcessController {
@@ -37,6 +38,8 @@ public class ProcessController {
     System.out.println(yutnoriSet.getNumOfPlayer() + "명의 플레이어");
   }
 
+  public int showTurn(int t){ return (currentTurn +1) % (yutnoriSet.getNumOfPlayer()+1); }
+
   /*FOR TEST*/
   public void rollYutTest(int res) {
     System.out.println("Roll Yut test!");
@@ -49,10 +52,10 @@ public class ProcessController {
       }
       System.out.println(res + "가 나왔습니다");
       if (res != 4 && res != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
-        System.out.println("움직일 말을 선택하세요!!!!!!!!!!!!!!!!!!!");
+        System.out.println("움직일 말을 선택하세요");
         yutnoriSet.setInGameFlag(1);
       } else{
-        System.out.println("한번 더 던질 수 있습니다!!!!!!!!!!!!!!!!!");
+        System.out.println("윷을 한번 더 던질 수 있습니다");
       }
       System.out.print("나온 목록 : ");
       for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
@@ -83,14 +86,14 @@ public class ProcessController {
       }
       System.out.println("");
       if (result != 4 && result != 5) { // 윷이나 모가 아니라면 befoer yut roll state에서 빠져나와 BEFORE SELECT PIECE STATE 로 들어가게 된다.
-        System.out.println("움직일 말을 선택하세요!!!!!!!!!!!!!!!!!!!");
+        System.out.println("Player " + showTurn(catchPoint) + "! 움직일 말을 선택하세요");
         yutnoriSet.setInGameFlag(1);
       } else{
-        System.out.println("한번 더 던질 수 있습니다!!!!!!!!!!!!!!!!!");
+        System.out.println("Player " + showTurn(catchPoint) + "한번 더 던질 수 있습니다");
       }
 
     } else{
-      System.out.println("윷 던지기 차례가 아닙니다!!!!!!!!!!!!!!!!!!!!");
+      System.out.println("Player " + showTurn(catchPoint) + "윷 던지기 차례가 아닙니다");
     }
   }
 
@@ -101,14 +104,19 @@ public class ProcessController {
      * */
   public void selectOutOfBoardPieceProcess(int turn){
     if(yutnoriSet.getInGameFlag() == 1 && (turn == currentTurn)){
-      //System.out.println("Select Piece Flag : " + flag + " Turn :" + currentTurn + "selected Piece : " + turn);
-      chosenPiece = yutnoriSet.getPlayer().getPieceIdFromOutOfBoard(currentTurn); // 눌려진 버튼으로 Piece id를 받아온다.
-      yutnoriSet.showMovable(chosenPiece);
-      yutnoriSet.setInGameFlag(2);
+      if(yutnoriSet.getPlayer().getLeftNumOfPieceOfPlayer(currentTurn) > 0) {
+        //System.out.println("Select Piece Flag : " + flag + " Turn :" + currentTurn + "selected Piece : " + turn);
+        chosenPiece = yutnoriSet.getPlayer().getPieceIdFromOutOfBoard(currentTurn); // 눌려진 버튼으로 Piece id를 받아온다.
+        yutnoriSet.showMovable(chosenPiece);
+        yutnoriSet.setInGameFlag(2);
+      } else {
+        System.out.println("더이상 남은 말이 없습니다.");
+        yutnoriSet.setInGameFlag(1);
+      }
     } else if(flag == 1 && (turn != currentTurn)){
-      System.out.println("본인의 말을 선택 해주세요!!!!!!!!!!!!!!!!!!!!!!!!");
+      System.out.println("Player " + showTurn(catchPoint) + "본인의 말을 선택 해주세요");
     } else {
-      System.out.println("말을 선택할 차례가 아닙니다!!!!!!!!!!!!!!!!!!!!!!!");
+      System.out.println("Player " + showTurn(catchPoint) + "말을 선택할 차례가 아닙니다");
     }
   }
 
@@ -117,7 +125,7 @@ public class ProcessController {
     try {
       ownerId = yutnoriSet.getPlayer().getPieceByLocation(row, col).getOwnerId();
     }catch(NullPointerException e){
-      System.out.println("Not piece on circle");
+      //System.out.println("Not piece on circle");
       return;
     }
 
@@ -129,7 +137,7 @@ public class ProcessController {
       yutnoriSet.setInGameFlag(2);
     } else if( flag == 1 &&
             currentTurn != (yutnoriSet.getPlayer().getPieceByPieceId(yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(0)).getOwnerId())){
-      System.out.println("본인의 말을 선택 해주세요!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      System.out.println("Player " + showTurn(catchPoint) + "본인의 말을 선택 해주세요");
     }
   }
 
@@ -137,15 +145,20 @@ public class ProcessController {
     if (numCanMove >= 1 && catchPoint == 0) { // 아직 움직일 수 있는 횟수가 남았고 잡은 말이 없다면 BEFORE SELECT PIECE STATE로 변경함
       yutnoriSet.setInGameFlag(1);
       yutnoriSet.setBoardUnchangeable();
+      System.out.println("Player" + showTurn(catchPoint) + " 움직일 수 있는 횟수가 " + numCanMove + "번 남았습니다.");
     } else if (numCanMove == 0 && catchPoint == 0) { // 움직일수 있는 횟수가 없고 잡은 말이 없다면 턴을 종료하고 다음 player에게 턴을 넘김.
       yutnoriSet.setPlayerTurn(((yutnoriSet.getPlayerTurn() + 1) % yutnoriSet.getNumOfPlayer()));
       yutnoriSet.setInGameFlag(0);
       yutnoriSet.setBoardUnchangeable();
       currentTurn = yutnoriSet.getPlayerTurn();
+      System.out.println("움직일수 있는 횟수 모두 소비! 다음 Player 에게 턴을 넘깁니다!");
+      System.out.println("");
+      System.out.println("Player" + showTurn(catchPoint) + " 윷을 던지세요! ");
     } else if (catchPoint > 0) { // 상대 말을 잡았다면 BEFORE YUT ROLL STATE로 변경하여 다시 윷을 던질 수 있게 함.
       catchPoint--;
       yutnoriSet.setInGameFlag(0);
       yutnoriSet.setBoardUnchangeable();
+      System.out.println("말을 잡았습니다 윷을 한번 더 던지세요");
     }
   }
 
@@ -153,7 +166,6 @@ public class ProcessController {
     try {
       System.out.println("result called " + result);
       yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer) result);
-
       decisionMaking();
     } catch (NullPointerException e){
       System.out.println("multi possible End");
@@ -166,35 +178,44 @@ public class ProcessController {
    * 말이 선택 되었으면 ShowMovable에 의해 나온 결과에 따라 움직여 주면 된다.
    */
   public void movePieceProcess(int row, int col) {
-    System.out.println("Move  Flag : " + yutnoriSet.getInGameFlag() + " Turn :" + currentTurn);
+    //System.out.println("Move  Flag : " + yutnoriSet.getInGameFlag() + " Turn :" + currentTurn);
+    System.out.println("Player"+ showTurn(catchPoint) +"의 말이 움직입니다!");
     Integer resultValue;
+    int numOfReachable = 0;
     boolean removeSuceed;
     if (yutnoriSet.getInGameFlag() == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
         catchPoint++;
       }
 
-
-      // move
+      numCanMove--;
       resultValue = yutnoriSet.getClickedResult(chosenPiece, row, col);
       yutnoriSet.move(chosenPiece, row, col);
-      numCanMove--;
       yutnoriSet.getMovable().clear();
-
 
       // When the piece(s) reach to the end point.
       if (row == 7 && col == 7) {
-        System.out.println("Player " + currentTurn + "의 말이 도착했습니다!");
+        System.out.println("Player " + showTurn(catchPoint) + "의 말이 도착했습니다!");
         for(int i : yutnoriSet.getBoard().getCircleByLocation(7,7).getOccupyingPieces()){
           yutnoriSet.getPlayer().getPieceByPieceId(i).setGone();
         }
+        
         // call view function with currentTurn
-        if(yutnoriSet.getPlayer().getPlayerResult(currentTurn).size()> 1) {
+        for(int i : yutnoriSet.getPlayer().getPlayerResult(currentTurn)){
+          if(i >= resultValue){
+            numOfReachable++;
+          }
+        }
+        if(numOfReachable > 1) {
+          System.out.println("popup called");
           yutGui.popUp(currentTurn, chosenPiece);
+        }else{
+          yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
+          decisionMaking();
         }
       } else {
         removeSuceed = yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
-        System.out.println(resultValue);
+
         if(removeSuceed == false){
           // When first input as Do, then result value is same as Back Do.
           // So the result value is 0.
@@ -202,17 +223,15 @@ public class ProcessController {
             yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove((Integer)1);
           }
         }
-
-        decisionMaking();
+        System.out.println("남은 목록 : ");
+        for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
+          System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
+        }
+        System.out.println("");
+        decisionMaking();  
       }
+      
       yutnoriSet.getBoard().getCircleByLocation(7,7).resetCircle();
-
-      // debug
-      System.out.println("남은 목록 : ");
-      for (int i = 0; i < yutnoriSet.getPlayer().getPlayerResult(currentTurn).size(); i++) {
-        System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
-      }
-      System.out.println("");
 
       System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId() + "가 승리!");
       if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
@@ -220,10 +239,9 @@ public class ProcessController {
         //종료시켜야함
         yutGui.setupExitGUI();
       }
-
     } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
 
-      System.out.println("Second click touch other thing");
+      //System.out.println("Second click touch other thing");
       for(int i = 0; i < yutnoriSet.getMovable().size(); i++) {
         //System.out.println("Yut nori set in " + i + " with " + yutnoriSet.getMovable().get(i));
       }

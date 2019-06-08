@@ -79,6 +79,7 @@ public class Player {
           numOfGonePiece++;
         }
       }
+      System.out.println(numOfGonePiece);
       if(numOfGonePiece == 0){
         return i;
       }
