@@ -128,6 +128,8 @@ public class ProcessController {
       //System.out.println("Not piece on circle");
       return;
     }
+
+
     if (yutnoriSet.getInGameFlag() == 1 && currentTurn == ownerId) {
       //System.out.println("Select Piece Flag : " + flag + "Turn :" + currentTurn);
       chosenPiece = yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(0);
@@ -189,6 +191,7 @@ public class ProcessController {
       numCanMove--;
       resultValue = yutnoriSet.getClickedResult(chosenPiece, row, col);
       yutnoriSet.move(chosenPiece, row, col);
+      yutnoriSet.getMovable().clear();
 
       // When the piece(s) reach to the end point.
       if (row == 7 && col == 7) {
@@ -196,12 +199,7 @@ public class ProcessController {
         for(int i : yutnoriSet.getBoard().getCircleByLocation(7,7).getOccupyingPieces()){
           yutnoriSet.getPlayer().getPieceByPieceId(i).setGone();
         }
-
-        System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId());
-        if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
-          System.out.println("게임이 끝났습니다!!!!! 승자 : Player" + currentTurn);
-          //종료시켜야함
-        }
+        
         // call view function with currentTurn
         for(int i : yutnoriSet.getPlayer().getPlayerResult(currentTurn)){
           if(i >= resultValue){
@@ -230,16 +228,17 @@ public class ProcessController {
           System.out.print(yutnoriSet.getPlayer().getPlayerResult(currentTurn).get(i) + ", ");
         }
         System.out.println("");
-
-        decisionMaking();
+        decisionMaking();  
       }
-      yutnoriSet.getMovable().clear();
+      
       yutnoriSet.getBoard().getCircleByLocation(7,7).resetCircle();
 
-
-      //System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId() + "가 승리!");
-
-
+      System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId() + "가 승리!");
+      if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
+        System.out.println("게임이 끝났습니다!!!!! 승자 : Player" + currentTurn);
+        //종료시켜야함
+        yutGui.setupExitGUI();
+      }
     } else if (!yutnoriSet.getMovable().contains(yutnoriSet.getBoard().getCircleByLocation(row, col).getId())) {
 
       //System.out.println("Second click touch other thing");

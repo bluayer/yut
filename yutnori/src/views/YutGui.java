@@ -26,6 +26,7 @@ public class YutGui {
   public BackGroundPanel midPanel;
   public JFrame mainFrame;
   public JFrame initFrame;
+  public JFrame exitFrame;
   public static ImagePanel[][] btn;
   static JButton[] testYutBtn;
   public JPanel yutBoard;
@@ -43,14 +44,16 @@ public class YutGui {
   public JPanel dialogPanel;
   static public JButton [] resButton;
   static int resButtonLength;
-  public int willRemove;
   static public JDialog d;
+  JPanel statusPanels;
+  JPanel yutButtonPanels;
 
   public YutGui(final models.YutNoRiSet yutSet) {
     midPanel = new BackGroundPanel();
     yutnoriset = yutSet;
     mainFrame = new JFrame("Mode Selection");
     initFrame = new JFrame("Game View");
+    exitFrame = new JFrame("Exit View");
     yutBoard= new JPanel();
     btn = new ImagePanel[8][8];
     clickAction = new UIclick(yutSet);
@@ -64,9 +67,47 @@ public class YutGui {
     groupingNum = new JLabel[8][8];
     dialogPanel = new JPanel();
     resButtonLength = 0;
+    statusPanels = new JPanel();
+    yutButtonPanels = new JPanel();
   }
 
   public void pcBridge(ProcessController pc) { clickAction.mouseClick.getProcessController(pc); }
+
+  public void setupExitGUI() {
+    exitFrame.setSize(FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
+    exitFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    exitFrame.setLayout(new BorderLayout(10, 10));
+    exitFrame.setLocationRelativeTo(null);
+
+    JPanel exitP = new JPanel();
+    exitP.setLayout(new GridLayout(0, 2));
+    JButton restart = new JButton();
+    restart.setText("Restart");
+    JButton exit = new JButton();
+    exit.setText("Exit");
+    restart.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        exitFrame.dispose();
+        setupStartUI();
+      }
+    });
+
+    exit.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        exitFrame.dispose();
+      }
+    });
+
+
+    exitP.add(restart);
+    exitP.add(exit);
+    exitFrame.add(exitP, BorderLayout.CENTER);
+
+    mainFrame.setVisible(false);
+    exitFrame.setVisible(true);
+  }
 
   private String getYutType(int yut) {
     String res = "";
@@ -185,7 +226,7 @@ public class YutGui {
     } else if (yutnoriset.getInGameFlag() == 2) {
       playerStatus.setText("Player status : Move piece");
     }
-    turnStatus.setText("Turn status : Player " +yutnoriset.getPlayerTurn() + " turn");
+    turnStatus.setText("Turn status : Player " + (yutnoriset.getPlayerTurn() +1 ) + "  turn");
 
     playerStatus.repaint();
     turnStatus.repaint();
@@ -262,7 +303,8 @@ public class YutGui {
     yutBoard.setLayout(new GridLayout(7, 7));
     yutBoard.setBackground(Color.WHITE);
     yutBoard.setBorder(new EmptyBorder(30, 30, 30, 30));
-
+    yutBoard.removeAll();
+    yutBoard.repaint();
     for(int i = 1; i < 8; i++) {
       for(int j = 1; j < 8; j++) {
         btn[i][j] = new ImagePanel();
@@ -288,13 +330,13 @@ public class YutGui {
       }
     }
 
-    JPanel statusPanels = new JPanel();
+    statusPanels.removeAll();
     // Fix outlook which is not compatible with name+image+number of piece.
     statusPanels.setLayout(new GridLayout(2, 0));
     statusPanels.setBorder(new EmptyBorder(0, 30, 0, 30));
 
+    yutButtonPanels.removeAll();
     /* Left side border */
-    JPanel yutButtonPanels = new JPanel();
     yutButtonPanels.setLayout(new GridLayout(0, 1));
     yutButtonPanels.setBorder(new EmptyBorder(0, 30, 0, 30));
 
