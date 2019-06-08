@@ -40,6 +40,7 @@ public class YutGui {
   private JLabel [] numberOutOfPiece;
   private JLabel playerStatus;
   private JLabel turnStatus;
+  private JLabel playerMovePrompt;
   private JLabel playerMovable;
   private JLabel[][] groupingNum;
   public JPanel dialogPanel;
@@ -65,6 +66,7 @@ public class YutGui {
     testYutBtn = makeTestYutBtn();
     playerStatus = new JLabel();
     turnStatus = new JLabel();
+    playerMovePrompt = new JLabel();
     playerMovable = new JLabel();
     groupingNum = new JLabel[8][8];
     dialogPanel = new JPanel();
@@ -148,7 +150,6 @@ public class YutGui {
   }
 
   public void popUp(int curPlayerID, int lowerBound) {
-
     System.out.println("Popup work");
     ArrayList<Integer> res = new ArrayList<>();
     for(int i : yutnoriset.getPlayer().getPlayerResult(curPlayerID)){
@@ -156,26 +157,16 @@ public class YutGui {
         res.add(i);
       }
     }
+    dialogPanel.removeAll();
     d = new JDialog(mainFrame, "Select yut res");
     JLabel l = new JLabel("Select yut res");
+
 
     resButton = new JButton[res.size()];
     for(int i = 0; i<res.size(); i++) {
       resButton[i] = new JButton(Integer.toString(res.get(i)));
       resButton[i].setText(getYutType(res.get(i)));
       resButton[i].addMouseListener(clickAction);
-//      resButton[i].addActionListener(new ActionListener() {
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//          String s = e.getActionCommand();
-//          yutnoriset.getPlayer().getPlayerResult(curPlayerID).remove(Integer.parseInt(s));
-//          d.setVisible(false);
-//          yutnoriSet.getBoard().getCircleByLocation(row, col).resetCircle();
-//          if(yutnoriSet.getPlayer().getLeftNumOfPieceOfPlayer(currentTurn) <= 0){
-//            System.out.println("게임이 끝나야합니다~~~~");
-//          }
-//        }
-//        });
       dialogPanel.add(resButton[i]);
     }
     d.add(l);
@@ -187,7 +178,7 @@ public class YutGui {
     d.repaint();
     mainFrame.repaint();
 
-    resButtonLength = resButton.length;
+    resButtonLength = res.size();
   }
 
   public void boardRepaint() {
@@ -240,20 +231,15 @@ public class YutGui {
       playerStatus.setText("Player status : Move piece");
     }
     turnStatus.setText("Turn status : Player " + (yutnoriset.getPlayerTurn() +1 ) + "  turn");
-    playerMovable.setText("Player " + (yutnoriset.getPlayerTurn() +1 ) + "'s Result : ");
-    int size = 0;
+    playerMovePrompt.setText("Player " + (yutnoriset.getPlayerTurn() +1 ) + "'s Result : ");
+    playerMovable.setText("");
     for(int i : yutnoriset.getPlayer().getPlayerResult(yutnoriset.getPlayerTurn())){
-      size++;
       playerMovable.setText(playerMovable.getText() + getYutType(i) + " ");
-//      if(size > 5){
-//        playerMovable.setText(playerMovable.getText() + "\n");
-//        size = 0;
-//      }
-
     }
 
     playerStatus.repaint();
     turnStatus.repaint();
+    playerMovePrompt.repaint();
     playerMovable.repaint();
 
   }
@@ -382,9 +368,10 @@ public class YutGui {
     selectP.setLayout(new GridLayout(playerNumber, 3));
 
     JPanel stateP = new JPanel();
-    stateP.setLayout(new GridLayout(3 , 0));
+    stateP.setLayout(new GridLayout(4 , 0));
     stateP.add(playerStatus);
     stateP.add(turnStatus);
+    stateP.add(playerMovePrompt);
     stateP.add(playerMovable);
     statusPanels.add(stateP);
     // set Player name and Piece at the side border
