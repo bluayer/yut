@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class ProcessController {
   public YutGui yutGui;
   public YutNoRiSet yutnoriSet;
-  public int flag = 0;
   public int currentTurn = 0;
   public int numCanMove = 0;
   public int catchPoint = 0;
@@ -36,6 +35,14 @@ public class ProcessController {
     System.out.println("짜잔");
     System.out.println(yutnoriSet.getNumOfPiece() + "개의 피스");
     System.out.println(yutnoriSet.getNumOfPlayer() + "명의 플레이어");
+  }
+
+  public void initProcess(){
+      yutnoriSet.setInGameFlag(0);
+      currentTurn = 0;
+      numCanMove = 0;
+      catchPoint =0;
+      chosenPiece = 1;
   }
 
   public int showTurn(int t){ return (currentTurn +1) % (yutnoriSet.getNumOfPlayer()+1); }
@@ -113,7 +120,7 @@ public class ProcessController {
         System.out.println("더이상 남은 말이 없습니다.");
         yutnoriSet.setInGameFlag(1);
       }
-    } else if(flag == 1 && (turn != currentTurn)){
+    } else if(yutnoriSet.getInGameFlag() == 1 && (turn != currentTurn)){
       System.out.println("Player " + showTurn(catchPoint) + "본인의 말을 선택 해주세요");
     } else {
       System.out.println("Player " + showTurn(catchPoint) + "말을 선택할 차례가 아닙니다");
@@ -135,7 +142,7 @@ public class ProcessController {
       chosenPiece = yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(0);
       yutnoriSet.showMovable(chosenPiece);
       yutnoriSet.setInGameFlag(2);
-    } else if( flag == 1 &&
+    } else if( yutnoriSet.getInGameFlag() == 1 &&
             currentTurn != (yutnoriSet.getPlayer().getPieceByPieceId(yutnoriSet.getBoard().getCircleByLocation(row, col).getOccupyingPieces().get(0)).getOwnerId())){
       System.out.println("Player " + showTurn(catchPoint) + "본인의 말을 선택 해주세요");
     }
