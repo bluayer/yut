@@ -37,14 +37,6 @@ public class ProcessController {
     System.out.println(yutnoriSet.getNumOfPlayer() + "명의 플레이어");
   }
 
-  public void initProcess(){
-      yutnoriSet.setInGameFlag(0);
-      currentTurn = 0;
-      numCanMove = 0;
-      catchPoint =0;
-      chosenPiece = 1;
-  }
-
   public int showTurn(int t){ return (currentTurn +1) % (yutnoriSet.getNumOfPlayer()+1); }
 
   /*FOR TEST*/
@@ -189,6 +181,7 @@ public class ProcessController {
     System.out.println("Player"+ showTurn(catchPoint) +"의 말이 움직입니다!");
     Integer resultValue;
     int numOfReachable = 0;
+    boolean gameOver = false;
     boolean removeSuceed;
     if (yutnoriSet.getInGameFlag() == 2 && yutnoriSet.getBoard().getCircleByLocation(row, col).isChangeable()) {
       if (yutnoriSet.tryCatch(chosenPiece, row, col)) {
@@ -212,6 +205,7 @@ public class ProcessController {
           System.out.println("게임이 끝났습니다!!!!! 승자 : Player" + currentTurn);
           //종료시켜야함
           yutGui.setupExitGUI();
+          gameOver = true;
         }
 
         // call view function with currentTurn
@@ -222,7 +216,7 @@ public class ProcessController {
             numOfReachable++;
           }
         }
-        if(numOfReachable > 1) {
+        if(numOfReachable > 1 && !gameOver) {
           System.out.println("popup called");
           yutGui.popUp(currentTurn, chosenPiece);
         }else{
