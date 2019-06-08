@@ -6,6 +6,9 @@ public class YutSet {
 
   public YutSet(){
     yutSet = new Yut[4];
+    for(int i = 0; i < YUTSETSIZE; i++){
+      yutSet[i] = new Yut();
+    }
   }
 
   public int rollYut(){
@@ -19,21 +22,12 @@ public class YutSet {
     // Throw back do.
     if(!yutSet[YUTSETSIZE-1].throwYut()){
       if(cal == 0){
-        return -1;
+        return 0;
       }
       cal++;
     }
 
-    return cal;
-  }
 
-  public boolean[] getYutSetStatus(){
-    boolean[] yutStatus = new boolean[4];
-
-    for(int i = 0; i < 4; i++){
-      yutStatus[i] = yutSet[i].getStatus();
-    }
-
-    return yutStatus;
+    return cal+1;
   }
 }

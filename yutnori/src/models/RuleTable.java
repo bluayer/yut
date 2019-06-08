@@ -5,37 +5,71 @@ public class RuleTable {
   public RuleTable(){
     nextMoveTable = new int[29][6][2];
 
-    for(int i = 0; i < 20; i++){
+    for(int i = 0; i < 29; i++){
       for(int j = 0; j < 6; j++){
-        if(i == 0 && j == 0){
-          nextMoveTable[i][j][0] = 1;
-        } else if(i+j >= 20){
-          nextMoveTable[i][j][0] = 0;
-        } else {
-            nextMoveTable[i][j][0] = j;
-        }
         nextMoveTable[i][j][1] = -1;
       }
     }
-    nextMoveTable[5][0][1] = -1;
+
+    for(int i = 0; i < 15; i++){
+      for(int j = 0; j < 6; j++){
+        if(i == 0 && j == 0){
+          nextMoveTable[0][0][0] = 1;
+          continue;
+        }
+        if(j == 0){
+          nextMoveTable[i][j][0] = i - 1;
+        }else {
+          nextMoveTable[i][j][0] = i + j;
+        }
+      }
+    }
     nextMoveTable[5][1][1] = 25;
     nextMoveTable[5][2][1] = 26;
     nextMoveTable[5][3][1] = 22;
     nextMoveTable[5][4][1] = 27;
     nextMoveTable[5][5][1] = 28;
 
-    nextMoveTable[10][0][1] = -1;
     nextMoveTable[10][1][1] = 24;
     nextMoveTable[10][2][1] = 23;
     nextMoveTable[10][3][1] = 22;
     nextMoveTable[10][4][1] = 21;
     nextMoveTable[10][5][1] = 20;
 
-    for(int i = 0; i < 9; i++){
-      for(int j = 0; j < 6; j++){
-        nextMoveTable[i+20][j][1] = -1;
-      }
-    }
+    nextMoveTable[15][0][0] = 14;
+    nextMoveTable[15][1][0] = 16;
+    nextMoveTable[15][2][0] = 17;
+    nextMoveTable[15][3][0] = 18;
+    nextMoveTable[15][4][0] = 19;
+    nextMoveTable[15][5][0] = 0;
+
+    nextMoveTable[16][0][0] = 15;
+    nextMoveTable[16][1][0] = 17;
+    nextMoveTable[16][2][0] = 18;
+    nextMoveTable[16][3][0] = 19;
+    nextMoveTable[16][4][0] = 0;
+    nextMoveTable[16][5][0] = 0;
+
+    nextMoveTable[17][0][0] = 16;
+    nextMoveTable[17][1][0] = 18;
+    nextMoveTable[17][2][0] = 19;
+    nextMoveTable[17][3][0] = 0;
+    nextMoveTable[17][4][0] = 0;
+    nextMoveTable[17][5][0] = 0;
+
+    nextMoveTable[18][0][0] = 17;
+    nextMoveTable[18][1][0] = 19;
+    nextMoveTable[18][2][0] = 0;
+    nextMoveTable[18][3][0] = 0;
+    nextMoveTable[18][4][0] = 0;
+    nextMoveTable[18][5][0] = 0;
+
+    nextMoveTable[19][0][0] = 18;
+    nextMoveTable[19][1][0] = 0;
+    nextMoveTable[19][2][0] = 0;
+    nextMoveTable[19][3][0] = 0;
+    nextMoveTable[19][4][0] = 0;
+    nextMoveTable[19][5][0] = 0;
 
     nextMoveTable[20][0][0] = 21;
     nextMoveTable[20][1][0] = 0;
@@ -43,6 +77,7 @@ public class RuleTable {
     nextMoveTable[20][3][0] = 0;
     nextMoveTable[20][4][0] = 0;
     nextMoveTable[20][5][0] = 0;
+
 
     nextMoveTable[21][0][0] = 22;
     nextMoveTable[21][1][0] = 20;
@@ -57,6 +92,7 @@ public class RuleTable {
     nextMoveTable[22][3][0] = 0;
     nextMoveTable[22][4][0] = 0;
     nextMoveTable[22][5][0] = 0;
+
     nextMoveTable[22][0][1] = 26;
     nextMoveTable[22][1][1] = 27;
     nextMoveTable[22][2][1] = 28;

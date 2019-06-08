@@ -4,12 +4,10 @@ import java.util.Random;
 
 public class Yut {
 
-
   private boolean status;
-  private String type;
+  Random generate = new Random();
 
-  Yut(String type){
-    this.type = type;
+  Yut(){
     status = true;
   }
 
@@ -18,12 +16,7 @@ public class Yut {
   }
 
   public boolean throwYut(){
-    Random generate = new Random();
     status = generate.nextBoolean();
     return status;
-  }
-
-  public String getType(){
-    return type;
   }
 }

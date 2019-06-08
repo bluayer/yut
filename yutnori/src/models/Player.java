@@ -8,10 +8,13 @@ public class Player {
   private int pieceNumber;
   private int playerNumber;
 
+  private ArrayList<ArrayList<Integer>> playerResult;
+
   Player(int playerNumber, int pieceNumber){
     this.playerNumber = playerNumber;
     this.pieceNumber = pieceNumber;
     players = new ArrayList<ArrayList<Piece>>();
+    playerResult = new ArrayList<ArrayList<Integer>>();
 
     for(int i = 0; i < playerNumber; i++){
       ArrayList<Piece> pieces = new ArrayList<Piece>();
@@ -20,6 +23,9 @@ public class Player {
         pieces.add(new Piece(0,0,i,i*10+j));
       }
       players.add(pieces);
+
+      ArrayList<Integer> playerR = new ArrayList<Integer>();
+      playerResult.add(playerR);
     }
   }
 
@@ -52,7 +58,7 @@ public class Player {
     try{
       int numOfLeftPieces = 0;
       for(Piece i : getPlayerPieces(playerId)){
-        if(!i.isGone()){
+        if(!i.isGone() && i.isOutOfBoard()){
           numOfLeftPieces++;
         }
       }
@@ -66,20 +72,19 @@ public class Player {
 
   // return player id who's pieces are all get to the finish line
   public int getWinnerPlayerId(){
-    int id = -1;
     for(int i = 0; i < playerNumber; i++) {
       int numOfGonePiece = 0;
       for (Piece j : players.get(i)) {
-        if (j.isGone()) {
+        if (!j.isGone()) {
           numOfGonePiece++;
         }
       }
+      System.out.println(numOfGonePiece);
       if(numOfGonePiece == 0){
-        id = numOfGonePiece;
-        break;
+        return i;
       }
     }
-    return id;
+    return -1;
   }
 
   public int getNumOfPiecesOutOfBoard(int playerId){
@@ -90,5 +95,19 @@ public class Player {
       }
     }
     return numOfPieceLocateInOutOfBoard;
+  }
+
+  public int getPieceIdFromOutOfBoard(int playerId){
+    for(Piece i : getPlayerPieces(playerId)){
+      if(i.isOutOfBoard()){
+        if(!i.isGone())
+          return i.getId();
+      }
+    }
+    return -1;
+  }
+
+  public ArrayList<Integer> getPlayerResult(int playerId) {
+    return playerResult.get(playerId);
   }
 }
