@@ -40,6 +40,7 @@ public class YutGui {
   private JLabel [] numberOutOfPiece;
   private JLabel playerStatus;
   private JLabel turnStatus;
+  private JLabel playerMovable;
   private JLabel[][] groupingNum;
   public JPanel dialogPanel;
   static public JButton [] resButton;
@@ -64,6 +65,7 @@ public class YutGui {
     testYutBtn = makeTestYutBtn();
     playerStatus = new JLabel();
     turnStatus = new JLabel();
+    playerMovable = new JLabel();
     groupingNum = new JLabel[8][8];
     dialogPanel = new JPanel();
     resButtonLength = 0;
@@ -145,10 +147,9 @@ public class YutGui {
     return res;
   }
 
-  public void popUp(int curPlayerID, int pieceId) {
+  public void popUp(int curPlayerID, int lowerBound) {
 
     System.out.println("Popup work");
-    int lowerBound = yutnoriset.getClickedResult(pieceId, 7, 7);
     ArrayList<Integer> res = new ArrayList<>();
     for(int i : yutnoriset.getPlayer().getPlayerResult(curPlayerID)){
       if(lowerBound <= i){
@@ -182,6 +183,7 @@ public class YutGui {
     d.setSize(200, 200);
     d.setLocation(200, 200);
     d.setVisible(true);
+    d.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     d.repaint();
     mainFrame.repaint();
 
@@ -238,9 +240,21 @@ public class YutGui {
       playerStatus.setText("Player status : Move piece");
     }
     turnStatus.setText("Turn status : Player " + (yutnoriset.getPlayerTurn() +1 ) + "  turn");
+    playerMovable.setText("Player " + (yutnoriset.getPlayerTurn() +1 ) + "'s Result : ");
+    int size = 0;
+    for(int i : yutnoriset.getPlayer().getPlayerResult(yutnoriset.getPlayerTurn())){
+      size++;
+      playerMovable.setText(playerMovable.getText() + getYutType(i) + " ");
+//      if(size > 5){
+//        playerMovable.setText(playerMovable.getText() + "\n");
+//        size = 0;
+//      }
+
+    }
 
     playerStatus.repaint();
     turnStatus.repaint();
+    playerMovable.repaint();
 
   }
 
@@ -368,9 +382,10 @@ public class YutGui {
     selectP.setLayout(new GridLayout(playerNumber, 3));
 
     JPanel stateP = new JPanel();
-    stateP.setLayout(new GridLayout(2 , 0));
+    stateP.setLayout(new GridLayout(3 , 0));
     stateP.add(playerStatus);
     stateP.add(turnStatus);
+    stateP.add(playerMovable);
     statusPanels.add(stateP);
     // set Player name and Piece at the side border
     for (int i=0; i< playerNumber; i++) {

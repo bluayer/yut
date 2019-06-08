@@ -199,6 +199,7 @@ public class ProcessController {
         for(int i : yutnoriSet.getBoard().getCircleByLocation(7,7).getOccupyingPieces()){
           yutnoriSet.getPlayer().getPieceByPieceId(i).setGone();
         }
+        System.out.println("result is " + resultValue);
         System.out.println(yutnoriSet.getPlayer().getWinnerPlayerId() + "가 승리!");
         System.out.println("CurrentTurn is " + currentTurn);
         if (yutnoriSet.getPlayer().getWinnerPlayerId() == currentTurn) {
@@ -219,7 +220,7 @@ public class ProcessController {
         }
         if(numOfReachable > 1 && !gameOver) {
           System.out.println("popup called");
-          yutGui.popUp(currentTurn, chosenPiece);
+          yutGui.popUp(currentTurn, resultValue);
         }else{
           yutnoriSet.getPlayer().getPlayerResult(currentTurn).remove(resultValue);
           decisionMaking();
