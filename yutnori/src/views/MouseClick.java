@@ -110,7 +110,7 @@ public class MouseClick{
         System.out.println("this is sensation " + removeNum);
         pc.multiPossibleEnd(removeNum);
         YutGui.d.setVisible(false);
-        YutGui.d = null;
+        YutGui.d.removeAll();
         YutGui.resButtonLength = 0;
       }
     }
